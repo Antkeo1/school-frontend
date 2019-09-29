@@ -11,6 +11,12 @@ class Signup extends Component {
         }
     }
 
+    handleChange = (name) => event => {
+        this.setState({
+            [name]: event.target.value
+        })
+    }
+
     handleSubmit = event => {
         event.preventDefault()
         const {name, email, password} = this.state
@@ -19,14 +25,21 @@ class Signup extends Component {
             email,
             password
         }
-
-    }
-
-    handleChange = (name) => event => {
-        this.setState({
-            [name]: event.target.value
+        // console.log(user)
+        fetch("http://localhost:8000/api/signup", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(user)
         })
+        .then(response => {
+            return response.json()
+        })
+        .catch(err => console.log(err))
     }
+
 
 
     render() {
