@@ -22,6 +22,17 @@ export const signout = (next) => {
     })
 }
 
+export const isAuthenticated = () => {
+    if(typeof window == 'undefined') {
+        return false 
+    }
+    if(localStorage.getItem('jwt')) {
+        return JSON.parse(localStorage.getItem('jwt'))
+    } else {
+        return false
+    }
+}
+
 
 const Menu = ({history}) => {
     return (
@@ -31,17 +42,25 @@ const Menu = ({history}) => {
                     <Link className='nav-link' style={isActive(history, '/')} to='/'>Home</Link>
                 </li>
                 
-                <li className="nav-item">
-                    <Link className='nav-link' style={isActive(history, '/signup')} to='/signup'>Sign Up</Link>
-                </li>
-                
-                <li className="nav-item">
-                    <Link className='nav-link' style={isActive(history, '/signin')} to='/signin'>Sign In</Link>
-                </li>
+               {!isAuthenticated() && (
+                   <div>
+                        <li className="nav-item">
+                            <Link className='nav-link' style={isActive(history, '/signup')} to='/signup'>Sign Up</Link>
+                        </li>
+                    
+                        <li className="nav-item">
+                            <Link className='nav-link' style={isActive(history, '/signin')} to='/signin'>Sign In</Link>
+                        </li>
+                    </div>
+               )}
 
-                <li className="nav-item">
-                    <a className='nav-link' style={{cursor: 'pointer', color: '#fff'}} onClick={() => signout(() => history.push('/'))}>Sign Out</a>
-                </li>
+                {isAuthenticated() && (
+                    <>
+                        <li className="nav-item">
+                            <a className='nav-link' style={{cursor: 'pointer', color: '#fff'}} onClick={() => signout(() => history.push('/'))}>Sign Out</a>
+                        </li>
+                    </>
+                )}
 
             </ul>
         </div>
