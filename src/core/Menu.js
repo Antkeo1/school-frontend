@@ -43,6 +43,10 @@ const Menu = ({history}) => {
                                 </Link>
                             </li>
 
+                            <li>
+                                <a className='nav-link' style={{cursor: 'pointer', color: '#fff'}} >Projects</a>
+                            </li>
+
                             <li >
                                 <a className='nav-link' style={{cursor: 'pointer', color: '#fff'}} onClick={() => signout(() => history.push('/'))}>Sign Out</a>
                             </li>
