@@ -1,8 +1,15 @@
 import React, {Component} from 'react'
 import {isAuthenticated} from '../auth'
+import {remove} from './apiUser'
+import {signout} from '../auth'
+import {Redirect} from 'react-router-dom'
 
 
 class DeleteUser extends Component {
+    state = {
+        redirect: false
+    }
+
     deleteAccount = () => {
         const token = isAuthenticated().token
         const userId = this.props.userId
@@ -13,6 +20,8 @@ class DeleteUser extends Component {
                 } else {
                     // signout user
                     // redirect
+                    signout(() => console.log('user is deleted'))
+                    this.setState({redirect: true})
                 }
             })
     }
@@ -25,6 +34,10 @@ class DeleteUser extends Component {
     }
 
     render() {
+        if(this.state.redirect) {
+            return <Redirect to='/' />
+        }
+
         return (
             <button onClick={this.deleteConfirm} className='btn btn-raised btn-danger'>
                 Delete Profile

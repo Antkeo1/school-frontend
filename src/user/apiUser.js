@@ -15,7 +15,7 @@ export const read = (userId, token) => {
 
 export const remove = (userId, token) => {
     return fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
-        method: "GET",
+        method: "DELETE",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
