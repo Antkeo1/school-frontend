@@ -3,6 +3,7 @@ import {isAuthenticated} from '../auth'
 import {Redirect, Link} from 'react-router-dom'
 import {read} from './apiUser'
 import DefaultProfile from '../images/avatar.jpeg'
+import DeleteUser from './DeleteUser'
 
 
 class Profile extends Component {
@@ -29,6 +30,12 @@ class Profile extends Component {
     componentDidMount() {
         const userId = this.props.match.params.userId
         this.init(userId)
+    }
+
+    // to navigate from another user to your own profile
+    componentWillReceiveProps(props) {
+        const userId = props.match.params.userId
+            this.init(userId)
     }
 
     render() {
@@ -64,13 +71,13 @@ class Profile extends Component {
                         </div>
 
                        {isAuthenticated().user && 
-                            isAuthenticated().user._id == 
+                            isAuthenticated().user._id === 
                                 user._id && (
                            <div className='d-inline-block'>
                                 <Link className='btn btn-raised btn-success mr-3' to={`/user/edit/${user._id}`}>
                                     Edit Profile
                                 </Link>
-                                <button className='btn btn-raised btn-danger mr-5'>Delete Profile</button>
+                                <DeleteUser userId={user._id} />
                            </div>
                        )}
                        

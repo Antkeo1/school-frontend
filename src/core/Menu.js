@@ -44,11 +44,11 @@ const Menu = ({history}) => {
                             </li>
 
                             <li>
-                                <a className='nav-link' style={{cursor: 'pointer', color: '#fff'}} >Projects</a>
+                                <span className='nav-link' style={{cursor: 'pointer', color: '#fff'}} >Projects</span>
                             </li>
 
                             <li >
-                                <a className='nav-link' style={{cursor: 'pointer', color: '#fff'}} onClick={() => signout(() => history.push('/'))}>Sign Out</a>
+                                <span className='nav-link' style={{cursor: 'pointer', color: '#fff'}} onClick={() => signout(() => history.push('/'))}>Sign Out</span>
                             </li>
                         </ul>
                     )}
