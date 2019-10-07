@@ -99,10 +99,18 @@ class Profile extends Component {
               onError={i => (i.target.src = `${DefaultProfile}`)}
               alt={user.name}
             />
-            <FollowProfileButton
+
+            {isAuthenticated().user &&
+            isAuthenticated().user._id === user._id ? (
+              null
+            ) : (
+              <div>
+                <FollowProfileButton
                 following={this.state.following}
                 onButtonClick={this.clickFollowButton}
               />
+              </div>
+            )}
           </div>
 
           <div className="col-md-8">
