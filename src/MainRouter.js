@@ -5,10 +5,14 @@ import Menu from './core/Menu'
 import Profile from './user/Profile'
 import Users from './user/Users'
 import EditProfile from './user/EditProfile'
+import FindPeople from './user/FindPeople'
+
+
 
 import Signup from './user/Signup'
 import Signin from './user/Signin'
 import PrivateRoute from './auth/PrivateRoute'
+import NewPost from './post/NewPost';
 
 
 const MainRouter = () => {
@@ -22,6 +26,8 @@ const MainRouter = () => {
                 <Route exact path='/signin' component={Signin} />
                 <PrivateRoute exact path='/user/:userId' component={Profile} />
                 <PrivateRoute exact path='/user/edit/:userId' component={EditProfile} />
+                <PrivateRoute exact path='/findpeople' component={FindPeople} />
+                <PrivateRoute exact path='/post/create' component={NewPost} />
 
             </Switch>
         </div>

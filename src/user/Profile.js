@@ -16,7 +16,7 @@ class Profile extends Component {
       redirectToSignin: false,
       following: false,
       error: "",
-      // posts: []
+      posts: []
     };
   }
 
@@ -123,12 +123,12 @@ class Profile extends Component {
             {isAuthenticated().user &&
             isAuthenticated().user._id === user._id ? (
               <div className="d-inline-block">
-                {/*<Link
+                <Link
                   className="btn btn-raised btn-info mr-5"
                   to={`/post/create`}
                 >
                   Create Post
-                </Link>*/}
+                </Link>
 
                 <Link
                   className="btn btn-raised btn-success mr-5"
@@ -140,8 +140,8 @@ class Profile extends Component {
               </div>
             ) : (
               <div>
-                <button className="btn btn-success btn-raised mr-5" >Project</button>
-                <button className="btn btn-success btn-raised mr-5" >Message</button>
+                <button style={{backgroundColor: 'blue', color: 'white'}} className="btn btn-raised mr-5" >Projects</button>
+                <button style={{backgroundColor: 'blue', color: 'white'}} className="btn btn-raised mr-5" >Send Message</button>
               </div>
             )}
 

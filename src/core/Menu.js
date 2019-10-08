@@ -43,6 +43,18 @@ const Menu = ({history}) => {
                                 </Link>
                             </li>
 
+                            <li >
+                                <Link className='nav-link'  to={`/findpeople`} style={isActive(history, `/findpeople`)} >
+                                    Find People
+                                </Link>
+                            </li>
+
+                            <li >
+                                <Link className='nav-link'  to={`/post/create`} style={isActive(history, `/post/create`)} >
+                                    Create Post
+                                </Link>
+                            </li>
+
                             <li>
                                 <span className='nav-link' style={{cursor: 'pointer', color: '#fff'}} >Projects</span>
                             </li>
