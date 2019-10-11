@@ -19,3 +19,10 @@
   ul.nav.navbar-nav li {
     margin: 0 0.5rem;
   }
+
+  #post {
+    display: flex;
+    align-items: justify-centent;
+    margin-left: 300px;
+    width: 800px;
+  }

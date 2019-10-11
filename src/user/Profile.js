@@ -6,7 +6,7 @@ import DefaultProfile from "../images/avatar.jpeg";
 import DeleteUser from "./DeleteUser";
 import FollowProfileButton from "./FollowProfileButton";
 import ProfileTabs from "./ProfileTabs";
-// import { listByUser } from "../post/apiPost";
+import { listByUser } from "../post/apiPost";
 
 class Profile extends Component {
   constructor() {
@@ -51,12 +51,12 @@ class Profile extends Component {
       } else {
         let following = this.checkFollow(data);
         this.setState({ user: data, following });
-        // this.loadPosts(data._id);
+        this.loadPosts(data._id);
       }
     });
   };
 
-  /*loadPosts = userId => {
+  loadPosts = userId => {
     const token = isAuthenticated().token;
     listByUser(userId, token).then(data => {
       if (data.error) {
@@ -65,7 +65,7 @@ class Profile extends Component {
         this.setState({ posts: data });
       }
     });
-  };*/
+  };
 
   componentDidMount() {
     const userId = this.props.match.params.userId;
