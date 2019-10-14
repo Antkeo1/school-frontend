@@ -8,11 +8,12 @@ import EditProfile from './user/EditProfile'
 import FindPeople from './user/FindPeople'
 import SinglePost from './post/SinglePost'
 
-
+import UploadFile from './upload/UploadFile'
 import Signup from './user/Signup'
 import Signin from './user/Signin'
 import PrivateRoute from './auth/PrivateRoute'
 import NewPost from './post/NewPost';
+import EditPost from './post/EditPost'
 
 
 const MainRouter = () => {
@@ -30,6 +31,8 @@ const MainRouter = () => {
                 <PrivateRoute exact path='/findpeople' component={FindPeople} />
                 <PrivateRoute exact path='/post/create' component={NewPost} />
                 <Route exact path='/post/:postId' component={SinglePost} />
+                <PrivateRoute exact path='/post/edit/:postId' component={EditPost} />
+                <PrivateRoute exact path='/upload' component={UploadFile} />
 
 
             </Switch>

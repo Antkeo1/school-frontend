@@ -40,8 +40,8 @@ class EditProfile extends Component {
 
     isValid = () => {
         const {name, email, password, fileSize} = this.state
-        if (fileSize > 100000) {
-            this.setState({ error: 'File size should be less than 100kb'})
+        if (fileSize > 1000000) {
+            this.setState({ error: 'File size to big'})
             return false
         }
         //email name
@@ -152,7 +152,7 @@ class EditProfile extends Component {
                 <img style={{height: '200px', width: 'auto'}} className='img-thumbnail' src={photoUrl} onError={i => (i.target.src = `${DefaultProfile}`)} alt={this.state.name} />
 
                 {this.editForm(name, email, password, about)}
-
+                
             </div>
         )
     }

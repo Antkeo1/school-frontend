@@ -1,11 +1,14 @@
 import React, {Component} from 'react'
-import {singlePost} from './apiPost'
-import {Link} from 'react-router-dom'
+import {singlePost, remove} from './apiPost'
+import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
+import DefaultPost from "../images/person.png";
+
 
 class SinglePost extends Component {
     state = {
-        post: ''
+        post: '',
+        redirectToHome: false
     }
 
     componentDidMount = () => {
@@ -19,6 +22,25 @@ class SinglePost extends Component {
         }) 
     }
 
+    deletePost = () => {
+        const postId = this.props.match.params.postId
+        const token = isAuthenticated().token
+        remove(postId, token).then(data => {
+            if(data.error) {
+                console.log(data.error)
+            } else {
+                this.setState({redirectToHome: true})
+            }
+        })
+    }
+
+    deleteConfirm = () => {
+        let answer = window.confirm('Are you sure you want to delete your post?')
+        if(answer) {
+            this.deletePost()
+        }
+    }
+
     renderPost = (post) => {
         const posterId = post.postedBy
         ? `/user/${post.postedBy._id}`
@@ -26,6 +48,13 @@ class SinglePost extends Component {
     const posterName = post.postedBy
         ? post.postedBy.name
         : " Unknown";
+
+        const photoUrl = post.postedBy
+        ? `${process.env.REACT_APP_API_URL}/user/photo/${
+            post.postedBy._id
+          }?${new Date().getTime()}`
+        : DefaultPost;
+
         return (
                 <div className="column" >
                     
@@ -33,6 +62,8 @@ class SinglePost extends Component {
                     <p className="font-italic mark">
                         Posted by{" "}
                         <Link to={`${posterId}`}>
+                        <img  style={{ height: "40px", borderRadius:'30px', width: "40px" }} className="img-thumbnail" src={photoUrl} alt='' />
+
                             {posterName}{" "}
                         </Link>
                         {new Date(post.created).toDateString()}
@@ -40,9 +71,7 @@ class SinglePost extends Component {
                     <br />
                     
                     <img
-                        src={`${
-                            process.env.REACT_APP_API_URL
-                        }/post/photo/${post._id}`}
+                        src={`http://localhost:8000/uploads/view`}
                         alt=''
                         onError={i =>
                             (i.target.src = ``)
@@ -63,10 +92,10 @@ class SinglePost extends Component {
                        {isAuthenticated().user && 
                         isAuthenticated().user._id === post.postedBy._id &&  
                         <>
-                             <button className='btn btn-raised btn-warning ml-4 btn-sm mr-4'>
+                             <Link to={`/post/edit/${post._id}`} className='btn btn-raised btn-warning ml-4 btn-sm mr-4'>
                                 Update Post
-                            </button>
-                            <button className='btn btn-raised btn-warning btn-sm'>
+                            </Link>
+                            <button onClick={this.deleteConfirm} className='btn btn-raised btn-warning btn-sm'>
                                 Delete Post
                             </button>
                         </>
@@ -78,6 +107,10 @@ class SinglePost extends Component {
     }
 
     render() {
+        if(this.state.redirectToHome) {
+            return <Redirect to={`/`} />
+         }
+
         const {post} = this.state
         return (
             <div className='text-center'>

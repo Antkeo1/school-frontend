@@ -1,11 +1,7 @@
 import React, { Component } from "react";
 import { list } from "./apiPost";
-import { userList } from "../user/apiUser";
-
 import DefaultPost from "../images/person.png";
 import { Link } from "react-router-dom";
-import { isAuthenticated } from "../auth";
-
 
 
 class Posts extends Component {
@@ -43,7 +39,7 @@ class Posts extends Component {
 
     renderPosts = posts => {
         return (
-            <div  className="row ">
+            <div  className="row">
                 {posts.map((post, i) => {
 
                     const posterId = post.postedBy
@@ -69,7 +65,7 @@ class Posts extends Component {
                                     Posted by{" "}
 
                                     <Link to={`${posterId}`}>
-                                        <img  style={{ height: "40px", borderRadius:'30px', width: "auto" }} className="img-thumbnail" src={photoUrl} alt='' />
+                                        <img  style={{ height: "40px", borderRadius:'30px', width: "40px" }} className="img-thumbnail" src={photoUrl} alt='' />
 
                                         {posterName}{" "}
                                     </Link>
@@ -80,15 +76,8 @@ class Posts extends Component {
                                     {post.body.substring(0, 100)}
                                 </p>
                                 <img
-                                    src={`${
-                                        process.env.REACT_APP_API_URL
-                                    }/post/photo/${post._id}`}
+                                    src={`http://localhost:8000/uploads/view`}
                                     alt=''
-                                    onError={i =>
-                                        (i.target.src = ``)
-                                    }
-                                    className="img-thunbnail mb-3"
-                                    style={{ height: "200px", width: "100%" }}
                                 />
                                 <Link
                                     to={`/post/${post._id}`}

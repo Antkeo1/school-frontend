@@ -1,13 +1,21 @@
 import React from 'react'
 import Post from '../post/Post'
 import {isAuthenticated} from '../auth'
+import axios from 'axios';
 
 
-const Home = () => {
-    console.log(isAuthenticated())
-    return (
-        
-       <div>
+class Home extends React.Component {
+    constructor(props) {
+    super(props);
+      this.state = {
+        selectedFile: null
+      }
+   
+  }
+
+    render() {
+        return (
+            <div>
             {isAuthenticated() ? (
                 <div className='container'>
                  <Post/>
@@ -19,7 +27,8 @@ const Home = () => {
             </div>
             )}
        </div>
-    )
+        )
+    }
 }
 
 export default Home

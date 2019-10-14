@@ -1,34 +1,56 @@
-import React, { Component } from "react";
+import React, {Component} from 'react'
+import { singlePost, update } from './apiPost';
 import { isAuthenticated } from "../auth";
-import { create } from "./apiPost";
 import { Redirect } from "react-router-dom";
-import axios from 'axios'
 
-class NewPost extends Component {
+
+
+class EditPost extends Component {
     constructor() {
-        super();
-        this.state = {
-            title: "",
-            body: "",
-            photo: "",
-            error: "",
-            user: {},
-            fileSize: 0,
-            loading: false,
-            redirectToProfile: false
-        };
+        super()
+        this.state = { 
+            id: '',
+            title: '',
+            body: '',
+            redirectToProfile: false,
+            error: '',
+            filesize: 0,
+            loading: false
+        }
+    }
+
+    init = (postId) => {
+        singlePost(postId).then(data => {
+            if (data.error) {
+                this.setState({redirectToProfile: true})
+            } else {
+                this.setState({id: data._id, title: data.title, body: data.body, error: ''})
+            }
+        })
     }
 
     componentDidMount() {
-        this.postData = new FormData();
-        this.setState({ user: isAuthenticated().user });
+        this.postData = new FormData()
+        const postId = this.props.match.params.postId
+        this.init(postId)
     }
+
+    showFile = async (e) => {
+        e.preventDefault()
+        const reader = new FileReader()
+        reader.onload = async (e) => { 
+          const text = (e.target.result)
+          console.log(text)
+          alert(text)
+        };
+        reader.readAsText(e.target.files[0])
+      }
 
     isValid = () => {
         const { title, body, fileSize } = this.state;
-        if (fileSize > 100000) {
+        if (fileSize > 1000000) {
             this.setState({
-                error: "File size should be less than 100kb",
+                error: "File size to large",
                 loading: false
             });
             return false;
@@ -55,10 +77,10 @@ class NewPost extends Component {
         this.setState({ loading: true });
 
         if (this.isValid()) {
-            const userId = isAuthenticated().user._id;
+            const postId = this.state.id
             const token = isAuthenticated().token;
 
-            create(userId, token, this.postData).then(data => {
+            update(postId, token, this.postData).then(data => {
                 if (data.error) this.setState({ error: data.error });
                 else {
                     this.setState({
@@ -72,14 +94,14 @@ class NewPost extends Component {
         }
     };
 
-    newPostForm = (title, body) => (
+    editPostForm = (title, body) => (
         <form>
             <div className="form-group">
                 <label className="text-muted">Post Photo</label>
                 <input
                     onChange={this.handleChange("photo")}
                     type="file"
-                    accept="image/* text/*"
+                    accept="txt/*"
                     className="form-control"
                 />
             </div>
@@ -107,49 +129,41 @@ class NewPost extends Component {
                 onClick={this.clickSubmit}
                 className="btn btn-raised btn-primary"
             >
-                Create Post
+                Edit Post
             </button>
         </form>
     );
 
+
     render() {
-        const {
-            title,
-            body,
-            photo,
-            user,
-            error,
-            loading,
-            redirectToProfile
-        } = this.state;
+        const {id, title, body, redirectToProfile, error, loading} = this.state
 
         if (redirectToProfile) {
-            return <Redirect to={`/user/${user._id}`} />;
+            return <Redirect to={`/user/${isAuthenticated().user._id}`} />;
         }
 
         return (
-            <div className="container">
-                <h2 className="mt-5 mb-5">Create a new post</h2>
-                <div
-                    className="alert alert-danger"
-                    style={{ display: error ? "" : "none" }}
-                >
+            <div className='container'>
+                <h2 className='mt-5 mb-5'>{title}</h2>
+                <div className='alert alert-danger' style={{display: error ? "" : "none"}}>
                     {error}
                 </div>
 
-                {loading ? (
-                    <div className="jumbotron text-center">
-                        <h2>Loading...</h2>
-                    </div>
+                {loading ? ( 
+                <div className='jumbotron text-center'>
+                    <h2>Loading....</h2>
+                </div>
                 ) : (
                     ""
-                )} 
- 
+                )
+            }
+                <img style={{height: '200px', width: 'auto'}} className='img-thumbnail' src={`${process.env.REACT_APP_API_URL}/post/photo/${id}`} onError={i => (i.target.src = ``)} alt='' />
 
-                {this.newPostForm(title, body)}
+
+                {this.editPostForm(title, body)}
             </div>
-        );
+        )
     }
 }
 
-export default NewPost;
+export default EditPost
