@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../auth";
-import { create } from "./apiPost";
+import { create } from "./apiUpload";
 import { Redirect } from "react-router-dom";
-import axios from 'axios'
 
-class NewPost extends Component {
+class NewUpload extends Component {
     constructor() {
         super();
         this.state = {
@@ -75,7 +74,7 @@ class NewPost extends Component {
     newPostForm = (title, body) => (
         <form>
             <div className="form-group">
-                <label className="text-muted">Post Photo</label>
+                <label className="text-muted"></label>
                 <input
                     onChange={this.handleChange("photo")}
                     type="file"
@@ -84,7 +83,7 @@ class NewPost extends Component {
                 />
             </div>
             <div className="form-group">
-                <label className="text-muted">Title</label>
+                <label className="text-muted">Title of Essay</label>
                 <input
                     onChange={this.handleChange("title")}
                     type="text"
@@ -94,7 +93,7 @@ class NewPost extends Component {
             </div>
 
             <div className="form-group">
-                <label className="text-muted">Body</label>
+                <label className="text-muted">Description of essay</label>
                 <textarea
                     onChange={this.handleChange("body")}
                     type="text"
@@ -107,7 +106,7 @@ class NewPost extends Component {
                 onClick={this.clickSubmit}
                 className="btn btn-raised btn-primary"
             >
-                Create Post
+                Upload Essay
             </button>
         </form>
     );
@@ -129,7 +128,7 @@ class NewPost extends Component {
 
         return (
             <div className="container">
-                <h2 className="mt-5 mb-5">Create a new post</h2>
+                <h2 className="mt-5 mb-5">Upload new Essay</h2>
                 <div
                     className="alert alert-danger"
                     style={{ display: error ? "" : "none" }}
@@ -152,4 +151,4 @@ class NewPost extends Component {
     }
 }
 
-export default NewPost;
+export default NewUpload;

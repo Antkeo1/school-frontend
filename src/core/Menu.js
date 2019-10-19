@@ -56,7 +56,7 @@ const Menu = ({history}) => {
                             </li>
 
                             <li>
-                                <Link className='nav-link'  to={`/upload`} style={isActive(history, `/upload`)} >
+                                <Link className='nav-link'  to={`/uploads`} style={isActive(history, `/upload/create`)} >
                                     Upload
                                 </Link>
                             </li>

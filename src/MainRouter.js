@@ -7,8 +7,11 @@ import Users from './user/Users'
 import EditProfile from './user/EditProfile'
 import FindPeople from './user/FindPeople'
 import SinglePost from './post/SinglePost'
+import EditUpload from './upload/EditUpload'
+import SingleUpload from './upload/SingleUpload'
+import Upload from './upload/Upload'
 
-import UploadFile from './upload/UploadFile'
+import NewUpload from './upload/NewUpload'
 import Signup from './user/Signup'
 import Signin from './user/Signin'
 import PrivateRoute from './auth/PrivateRoute'
@@ -32,8 +35,11 @@ const MainRouter = () => {
                 <PrivateRoute exact path='/post/create' component={NewPost} />
                 <Route exact path='/post/:postId' component={SinglePost} />
                 <PrivateRoute exact path='/post/edit/:postId' component={EditPost} />
-                <PrivateRoute exact path='/upload' component={UploadFile} />
-
+              
+                <PrivateRoute exact path='/uploads' component={Upload} />
+                <PrivateRoute exact path='/upload/create' component={NewUpload} />
+                <PrivateRoute exact path='/upload/edit/:uploadId' component={EditUpload} />
+                <Route exact path='/upload/:uploadId' component={SingleUpload} />
 
             </Switch>
         </div>

@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
-import {singlePost, remove} from './apiPost'
+import {singlePost, remove} from './apiUpload'
 import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
 import DefaultPost from "../images/person.png";
 
 
-class SinglePost extends Component {
+class SingleUpload extends Component {
     state = {
         post: '',
         redirectToHome: false
@@ -136,4 +136,4 @@ class SinglePost extends Component {
     }
 }
 
-export default SinglePost
+export default SingleUpload

@@ -19,6 +19,8 @@ class Posts extends Component {
                 console.log(data.error);
             } else {
                 this.setState({ posts: data });
+                
+
             }
         });
     };
@@ -41,7 +43,7 @@ class Posts extends Component {
         return (
             <div  className="row">
                 {posts.map((post, i) => {
-
+                    // console.log(post.postedBy.photo)
                     const posterId = post.postedBy
                         ? `/user/${post.postedBy._id}`
                         : "";
@@ -54,7 +56,10 @@ class Posts extends Component {
                             post.postedBy._id
                           }?${new Date().getTime()}`
                         : DefaultPost;
-                    
+                          
+                        const fileUrl = `${
+                            process.env.REACT_APP_API_URL
+                        }/post/photo/${post._id}`
 
                     return (
                         <div id='post' style={{width: '500px'}} className="card col-md-4" key={i}>
@@ -75,9 +80,19 @@ class Posts extends Component {
                                 <p className="card-text">
                                     {post.body.substring(0, 100)}
                                 </p>
+                                
+{                                    <iframe src={fileUrl} style={{width: '100px', height: '100px'}} alt='hello'></iframe>
+}                                
                                 <img
-                                    src={`http://localhost:8000/uploads/view`}
+                                    src={`${
+                                        process.env.REACT_APP_API_URL
+                                    }/post/photo/${post._id}`}
                                     alt=''
+                                    onError={i =>
+                                        (i.target.src = ``)
+                                    }
+                                    className="img-thunbnail mb-3"
+                                    style={{ height: "200px", width: "100%" }}
                                 />
                                 <Link
                                     to={`/post/${post._id}`}
@@ -111,3 +126,5 @@ class Posts extends Component {
 }
 
 export default Posts;
+
+
