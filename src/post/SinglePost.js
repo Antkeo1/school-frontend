@@ -55,10 +55,6 @@ class SinglePost extends Component {
           }?${new Date().getTime()}`
         : DefaultPost;
 
-        const fileUrl = `${
-            process.env.REACT_APP_API_URL
-        }/post/photo/${post._id}`
-
         return (
                 <div className="column" >
                     
@@ -78,18 +74,20 @@ class SinglePost extends Component {
                     <p className="card-text">
                         {post.body}
                     </p>
-                    <img
-                        src={`${
-                            process.env.REACT_APP_API_URL
-                        }/post/photo/${post._id}`}
-                        alt=''
-                        onError={i =>
-                            (i.target.src = ``)
-                        }
-                        className="img-thunbnail mb-3 ml-50"
-                        style={{height: 'auto', width: '100%', objectFit: 'cover'}}
-                    />
-                    <iframe src={fileUrl} style={{height: 'auto', width: '100%', objectFit: 'cover'}}></iframe>
+                   <div className='container'>
+                    <img 
+                            src={`${
+                                process.env.REACT_APP_API_URL
+                            }/post/photo/${post._id}`}
+                            alt=''
+                            onError={i =>
+                                (i.target.src = ``)
+                            }
+                            className="img-thunbnail mb-3 ml-50"
+                            style={{height: 'auto', width: '100%', objectFit: 'cover'}}
+                        />
+                   </div>
+                    
 
                     <div className='d-inline-block'>
                         <Link

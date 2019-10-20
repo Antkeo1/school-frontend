@@ -1,15 +1,16 @@
 import React, { Component } from "react";
-import { listByUser, read } from "./apiUpload";
+import { uploadByUser, read } from "./apiUpload";
 import DefaultPost from "../images/person.png";
 import { Link } from "react-router-dom";
 import { isAuthenticated } from "../auth";
+import NewUpload from "./NewUpload";
 
 
 class Upload extends Component {
     constructor() {
         super();
         this.state = {
-            user: '',
+            user: {},
             uploads: []
         };
        
@@ -17,7 +18,7 @@ class Upload extends Component {
 
     loadUploads = userId => {
         const token = isAuthenticated().token;
-        listByUser(userId, token).then(data => {
+        uploadByUser(userId, token).then(data => {
           if (data.error) {
             console.log(data.error);
           } else {
@@ -43,27 +44,35 @@ class Upload extends Component {
         this.init(userId);
     }
 
-
+    componentWillReceiveProps(props) {
+        const userId = isAuthenticated().user._id;
+        this.init(userId);
+      }
 
     render() {
         const { user, uploads } = this.state;
         console.log(user)
         return (
-            <div className="col-md-4">
-            <h3 className="text-primary">{uploads.length} Uploads</h3>
-            <hr />
-            {uploads.map((upload, i) => (
-                <div key={i}>
-                    <div>
-                        <Link to={`/upload/${upload._id}`}>
-                            <div>
-                                <p className="lead">{upload.title}</p>
-                            </div>
-                        </Link>
-                    </div>
+            
+            <div className="container">
+                {/* < NewUpload user={user}/> */}
+                <div className='navbar' id='uploadForm'>
+                    <h3 className="text-primary">{user.name} has {uploads.length} Uploads</h3>
+                    <Link to={`/upload/create`} className='btn btn-raised btn-primary'>New Upload</Link>
                 </div>
-            ))}
-        </div> 
+                <hr />
+                {uploads.map((upload, i) => (
+                    <div key={i}>
+                        <div>
+                            <Link to={`/upload/${upload._id}`}>
+                                <div>
+                                    <p className="lead">{upload.title}</p>
+                                </div>
+                            </Link>
+                        </div>
+                    </div>
+                ))}
+            </div> 
         );
     }
 }

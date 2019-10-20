@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { singlePost, update } from './apiUpload';
+import { singleUpload, update } from './apiUpload';
 import { isAuthenticated } from "../auth";
 import { Redirect } from "react-router-dom";
 
@@ -19,8 +19,8 @@ class EditUpload extends Component {
         }
     }
 
-    init = (postId) => {
-        singlePost(postId).then(data => {
+    init = (uploadId) => {
+        singleUpload(uploadId).then(data => {
             if (data.error) {
                 this.setState({redirectToProfile: true})
             } else {
@@ -30,21 +30,10 @@ class EditUpload extends Component {
     }
 
     componentDidMount() {
-        this.postData = new FormData()
-        const postId = this.props.match.params.postId
-        this.init(postId)
+        this.uploadData = new FormData()
+        const uploadId = this.props.match.params.uploadId
+        this.init(uploadId)
     }
-
-    showFile = async (e) => {
-        e.preventDefault()
-        const reader = new FileReader()
-        reader.onload = async (e) => { 
-          const text = (e.target.result)
-          console.log(text)
-          alert(text)
-        };
-        reader.readAsText(e.target.files[0])
-      }
 
     isValid = () => {
         const { title, body, fileSize } = this.state;
@@ -68,7 +57,7 @@ class EditUpload extends Component {
             name === "photo" ? event.target.files[0] : event.target.value;
 
         const fileSize = name === "photo" ? event.target.files[0].size : 0;
-        this.postData.set(name, value);
+        this.uploadData.set(name, value);
         this.setState({ [name]: value, fileSize });
     };
 
@@ -97,7 +86,6 @@ class EditUpload extends Component {
     editPostForm = (title, body) => (
         <form>
             <div className="form-group">
-                <label className="text-muted">Post Photo</label>
                 <input
                     onChange={this.handleChange("photo")}
                     type="file"
@@ -129,7 +117,7 @@ class EditUpload extends Component {
                 onClick={this.clickSubmit}
                 className="btn btn-raised btn-primary"
             >
-                Edit Post
+                Edit File
             </button>
         </form>
     );
@@ -144,7 +132,6 @@ class EditUpload extends Component {
 
         return (
             <div className='container'>
-                <h2 className='mt-5 mb-5'>{title}</h2>
                 <div className='alert alert-danger' style={{display: error ? "" : "none"}}>
                     {error}
                 </div>

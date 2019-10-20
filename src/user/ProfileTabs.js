@@ -4,11 +4,11 @@ import DefaultProfile from "../images/avatar.jpeg";
 
 class ProfileTabs extends Component {
     render() {
-        const { following, followers, posts } = this.props;
+        const { following, followers, posts, uploads } = this.props;
         return (
             <div>
                 <div className="row">
-                    <div className="col-md-4">
+                    <div className="col-md-3">
                         <h3 className="text-primary">
                             {followers.length} Followers
                         </h3>
@@ -44,7 +44,7 @@ class ProfileTabs extends Component {
                         ))}
                     </div>
 
-                    <div className="col-md-4">
+                    <div className="col-md-3">
                         <h3 className="text-primary">
                             {following.length} Following
                         </h3>
@@ -80,7 +80,7 @@ class ProfileTabs extends Component {
                         ))}
                     </div>
 
-                    <div className="col-md-4">
+                    <div className="col-md-3">
                         <h3 className="text-primary">{posts.length} Posts</h3>
                         <hr />
                         {posts.map((post, i) => (
@@ -89,6 +89,22 @@ class ProfileTabs extends Component {
                                     <Link to={`/post/${post._id}`}>
                                         <div>
                                             <p className="lead">{post.title}</p>
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="col-md-3">
+                        <h3 className="text-primary">{uploads.length} Essays</h3>
+                        <hr />
+                        {uploads.map((upload, i) => (
+                            <div key={i}>
+                                <div>
+                                    <Link to={`/upload/${upload._id}`}>
+                                        <div>
+                                            <p className="lead">{upload.title}</p>
                                         </div>
                                     </Link>
                                 </div>

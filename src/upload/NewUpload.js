@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { isAuthenticated } from "../auth";
 import { create } from "./apiUpload";
 import { Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 class NewUpload extends Component {
     constructor() {
@@ -14,13 +15,13 @@ class NewUpload extends Component {
             user: {},
             fileSize: 0,
             loading: false,
-            redirectToProfile: false
+            redirectToUpload: false
         };
     }
 
     componentDidMount() {
-        this.postData = new FormData();
-        this.setState({ user: isAuthenticated().user });
+        this.uploadData = new FormData();
+        this.setState({ user: isAuthenticated().user});
     }
 
     isValid = () => {
@@ -45,7 +46,7 @@ class NewUpload extends Component {
             name === "photo" ? event.target.files[0] : event.target.value;
 
         const fileSize = name === "photo" ? event.target.files[0].size : 0;
-        this.postData.set(name, value);
+        this.uploadData.set(name, value);
         this.setState({ [name]: value, fileSize });
     };
 
@@ -57,14 +58,14 @@ class NewUpload extends Component {
             const userId = isAuthenticated().user._id;
             const token = isAuthenticated().token;
 
-            create(userId, token, this.postData).then(data => {
+            create(userId, token, this.uploadData).then(data => {
                 if (data.error) this.setState({ error: data.error });
                 else {
                     this.setState({
                         loading: false,
                         title: "",
                         body: "",
-                        redirectToProfile: true
+                        redirectToUpload: true
                     });
                 }
             });
@@ -83,7 +84,7 @@ class NewUpload extends Component {
                 />
             </div>
             <div className="form-group">
-                <label className="text-muted">Title of Essay</label>
+                <label className="text-muted">Title of file</label>
                 <input
                     onChange={this.handleChange("title")}
                     type="text"
@@ -93,7 +94,7 @@ class NewUpload extends Component {
             </div>
 
             <div className="form-group">
-                <label className="text-muted">Description of essay</label>
+                <label className="text-muted">Description of file</label>
                 <textarea
                     onChange={this.handleChange("body")}
                     type="text"
@@ -102,12 +103,15 @@ class NewUpload extends Component {
                 />
             </div>
 
-            <button
-                onClick={this.clickSubmit}
-                className="btn btn-raised btn-primary"
-            >
-                Upload Essay
-            </button>
+            <div className='row'>
+                <button
+                    onClick={this.clickSubmit}
+                    className="btn btn-raised btn-primary"
+                >
+                    Upload File
+                </button>
+                <Link className='btn btn-raised ml-5' to={'/uploads'}>Back</Link>
+            </div>
         </form>
     );
 
@@ -119,16 +123,15 @@ class NewUpload extends Component {
             user,
             error,
             loading,
-            redirectToProfile
+            redirectToUpload
         } = this.state;
 
-        if (redirectToProfile) {
-            return <Redirect to={`/user/${user._id}`} />;
+        if (redirectToUpload) {
+            return <Redirect to={`/uploads`} />;
         }
 
         return (
             <div className="container">
-                <h2 className="mt-5 mb-5">Upload new Essay</h2>
                 <div
                     className="alert alert-danger"
                     style={{ display: error ? "" : "none" }}

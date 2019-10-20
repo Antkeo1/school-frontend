@@ -1,6 +1,6 @@
 /* Nav */
 
-.navbar {
+.navbar-expand {
     margin-bottom: 1rem;
     background: blue;
   }
@@ -25,4 +25,9 @@
     align-items: justify-centent;
     margin-left: 300px;
     width: 800px;
+  }
+
+  #uploadForm button{
+    display: flex;
+    align-content: space-between
   }

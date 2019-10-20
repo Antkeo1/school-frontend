@@ -7,6 +7,8 @@ import DeleteUser from "./DeleteUser";
 import FollowProfileButton from "./FollowProfileButton";
 import ProfileTabs from "./ProfileTabs";
 import { listByUser } from "../post/apiPost";
+import { uploadByUser } from "../upload/apiUpload";
+
 
 class Profile extends Component {
   constructor() {
@@ -16,7 +18,8 @@ class Profile extends Component {
       redirectToSignin: false,
       following: false,
       error: "",
-      posts: []
+      posts: [],
+      uploads: []
     };
   }
 
@@ -43,6 +46,8 @@ class Profile extends Component {
     });
   };
 
+  
+
   init = userId => {
     const token = isAuthenticated().token;
     read(userId, token).then(data => {
@@ -52,6 +57,18 @@ class Profile extends Component {
         let following = this.checkFollow(data);
         this.setState({ user: data, following });
         this.loadPosts(data._id);
+        this.loadUploads(data._id);
+      }
+    });
+  };
+
+  loadUploads = userId => {
+    const token = isAuthenticated().token;
+    uploadByUser(userId, token).then(data => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        this.setState({ uploads: data });
       }
     });
   };
@@ -76,9 +93,10 @@ class Profile extends Component {
     const userId = props.match.params.userId;
     this.init(userId);
   }
+  
 
   render() {
-    const { redirectToSignin, user, posts } = this.state;
+    const { redirectToSignin, user, posts, uploads } = this.state;
     if (redirectToSignin) return <Redirect to="/signin" />;
 
     const photoUrl = user._id
@@ -100,17 +118,7 @@ class Profile extends Component {
               alt={user.name}
             />
 
-            {isAuthenticated().user &&
-            isAuthenticated().user._id === user._id ? (
-              null
-            ) : (
-              <div>
-                <FollowProfileButton
-                following={this.state.following}
-                onButtonClick={this.clickFollowButton}
-              />
-              </div>
-            )}
+           
           </div>
 
           <div className="col-md-8">
@@ -122,7 +130,7 @@ class Profile extends Component {
 
             {isAuthenticated().user &&
             isAuthenticated().user._id === user._id ? (
-              <div className="d-inline-block">
+              <div className="row">
                 <Link
                   className="btn btn-raised btn-info mr-5"
                   to={`/post/create`}
@@ -139,9 +147,19 @@ class Profile extends Component {
                 <DeleteUser userId={user._id} />
               </div>
             ) : (
-              <div>
-                <button style={{backgroundColor: 'blue', color: 'white'}} className="btn btn-raised mr-5" >Projects</button>
-                <button style={{backgroundColor: 'blue', color: 'white'}} className="btn btn-raised mr-5" >Send Message</button>
+              <div className='row'>
+                 {isAuthenticated().user &&
+                    isAuthenticated().user._id === user._id ? (
+                      null
+                    ) : (
+                      <div className='mr-5'>
+                        <FollowProfileButton
+                        following={this.state.following}
+                        onButtonClick={this.clickFollowButton}
+                      />
+                      </div>
+                    )}
+                <button  style={{backgroundColor: 'blue', color: 'white'}} className="btn btn-raised mr-5" >Send Message</button>
               </div>
             )}
 
@@ -178,6 +196,7 @@ class Profile extends Component {
               followers={user.followers}
               following={user.following}
               posts={posts}
+              uploads={uploads}
             />
           </div>
         </div>

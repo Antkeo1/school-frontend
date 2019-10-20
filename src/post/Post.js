@@ -79,10 +79,8 @@ class Posts extends Component {
                                 <br />
                                 <p className="card-text">
                                     {post.body.substring(0, 100)}
-                                </p>
-                                
-{                                    <iframe src={fileUrl} style={{width: '100px', height: '100px'}} alt='hello'></iframe>
-}                                
+                                </p>                                  
+                             
                                 <img
                                     src={`${
                                         process.env.REACT_APP_API_URL

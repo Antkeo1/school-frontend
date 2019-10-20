@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {singlePost, remove} from './apiUpload'
+import {singleUpload, remove} from './apiUpload'
 import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
 import DefaultPost from "../images/person.png";
@@ -7,81 +7,81 @@ import DefaultPost from "../images/person.png";
 
 class SingleUpload extends Component {
     state = {
-        post: '',
-        redirectToHome: false
+        upload: '',
+        redirectToUpload: false
     }
 
     componentDidMount = () => {
-        const postId = this.props.match.params.postId
-        singlePost(postId).then(data => {
+        const uploadId = this.props.match.params.uploadId
+        singleUpload(uploadId).then(data => {
             if (data.error) {
                 console.log(data.error)
             } else {
-                this.setState({post: data})
+                this.setState({upload: data})
             }
         }) 
     }
 
-    deletePost = () => {
-        const postId = this.props.match.params.postId
+    deleteUpload = () => {
+        const uploadId = this.props.match.params.uploadId
         const token = isAuthenticated().token
-        remove(postId, token).then(data => {
+        remove(uploadId, token).then(data => {
             if(data.error) {
                 console.log(data.error)
             } else {
-                this.setState({redirectToHome: true})
+                this.setState({redirectToUpload: true})
             }
         })
     }
 
     deleteConfirm = () => {
-        let answer = window.confirm('Are you sure you want to delete your post?')
+        let answer = window.confirm('Are you sure you want to delete your upload?')
         if(answer) {
-            this.deletePost()
+            this.deleteUpload()
         }
     }
 
-    renderPost = (post) => {
-        const posterId = post.postedBy
-        ? `/user/${post.postedBy._id}`
+    renderUpload = (upload) => {
+        const uploaderId = upload.uploadedBy
+        ? `/user/${upload.uploadedBy._id}`
         : "";
-    const posterName = post.postedBy
-        ? post.postedBy.name
+    const uploaderName = upload.uploadedBy
+        ? upload.uploadedBy.name
         : " Unknown";
 
-        const photoUrl = post.postedBy
+        const photoUrl = upload.uploadedBy
         ? `${process.env.REACT_APP_API_URL}/user/photo/${
-            post.postedBy._id
+            upload.uploadedBy._id
           }?${new Date().getTime()}`
         : DefaultPost;
 
         const fileUrl = `${
             process.env.REACT_APP_API_URL
-        }/post/photo/${post._id}`
+        }/upload/photo/${upload._id}`
 
         return (
                 <div className="column" >
                     
                    
                     <p className="font-italic mark">
-                        Posted by{" "}
-                        <Link to={`${posterId}`}>
+                        Uploaded by{" "}
+                        <Link to={`${uploaderId}`}>
                         <img  style={{ height: "40px", borderRadius:'30px', width: "40px" }} className="img-thumbnail" src={photoUrl} alt='' />
 
-                            {posterName}{" "}
+                            {uploaderName}{" "}
                         </Link>
-                        {new Date(post.created).toDateString()}
+                        {new Date(upload.created).toDateString()}
                     </p>
                     <br />
                     
                     
                     <p className="card-text">
-                        {post.body}
+                        {upload.title}
                     </p>
                     <img
                         src={`${
                             process.env.REACT_APP_API_URL
-                        }/post/photo/${post._id}`}
+                        }/upload/photo/${upload._id}`}
                         alt=''
                         onError={i =>
                             (i.target.src = ``)
@@ -89,23 +89,25 @@ class SingleUpload extends Component {
                         className="img-thunbnail mb-3 ml-50"
                         style={{height: 'auto', width: '100%', objectFit: 'cover'}}
                     />
-                    <iframe src={fileUrl} style={{height: 'auto', width: '100%', objectFit: 'cover'}}></iframe>
+                    <div className='container'> 
+                        <iframe src={fileUrl} style={{height: '500px', width: '100%', objectFit: 'cover'}}></iframe>
+                    </div>
 
                     <div className='d-inline-block'>
                         <Link
-                            to={`/`}
+                            to={`/uploads`}
                             className="btn btn-raised btn-primary btn-sm"
                         >
-                            Back to posts
+                            Back to uploads
                         </Link>
                        {isAuthenticated().user && 
-                        isAuthenticated().user._id === post.postedBy._id &&  
+                        isAuthenticated().user._id === upload.uploadedBy._id &&  
                         <>
-                             <Link to={`/post/edit/${post._id}`} className='btn btn-raised btn-warning ml-4 btn-sm mr-4'>
-                                Update Post
+                             <Link to={`/upload/edit/${upload._id}`} className='btn btn-raised btn-warning ml-4 btn-sm mr-4'>
+                                Update Upload
                             </Link>
                             <button onClick={this.deleteConfirm} className='btn btn-raised btn-warning btn-sm'>
-                                Delete Post
+                                Delete Upload
                             </button>
                         </>
                         
@@ -116,19 +118,19 @@ class SingleUpload extends Component {
     }
 
     render() {
-        if(this.state.redirectToHome) {
-            return <Redirect to={`/`} />
+        if(this.state.redirectToUpload) {
+            return <Redirect to={`/uploads`} />
          }
 
-        const {post} = this.state
+        const {upload} = this.state
         return (
             <div className='text-center'>
-                {!post ? ( 
+                {!upload ? ( 
                 <div className='jumbotron text-center'>
                     <h2>Loading....</h2>
                 </div>
                 ) : (
-                    this.renderPost(post)
+                    this.renderUpload(upload)
                 )
             }
             </div>

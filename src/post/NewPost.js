@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { isAuthenticated } from "../auth";
 import { create } from "./apiPost";
 import { Redirect } from "react-router-dom";
-import axios from 'axios'
+
 
 class NewPost extends Component {
     constructor() {

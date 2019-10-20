@@ -38,7 +38,7 @@ export const list = () => {
         .catch(err => console.log(err));
 };
 
-export const singlePost = (uploadId) => {
+export const singleUpload = (uploadId) => {
     return fetch(`${process.env.REACT_APP_API_URL}/upload/${uploadId}`, {
         method: "GET"
     })
@@ -48,7 +48,7 @@ export const singlePost = (uploadId) => {
         .catch(err => console.log(err));
 };
 
-export const listByUser = (userId, token) => {
+export const uploadByUser = (userId, token) => {
     return fetch(`${process.env.REACT_APP_API_URL}/uploads/by/${userId}`, {
         method: "GET",
         headers: {
