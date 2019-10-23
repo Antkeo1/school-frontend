@@ -83,7 +83,7 @@ class NewUpload extends Component {
                 <input
                     onChange={this.handleChange("photo")}
                     type="file"
-                    accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf" 
+                    accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf, .html" 
                     className="form-control"
                 />
             </div>

@@ -3,7 +3,7 @@ import {singleUpload, remove} from './apiUpload'
 import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
 import DefaultPost from "../images/person.png";
-import PDF from 'react-pdf-js'
+import PDF from 'react-pdf-to-image'
 import FileViewer from 'react-file-viewer';
 import { Document, Page, pdfjs } from 'react-pdf'
 
@@ -109,14 +109,24 @@ class SingleUpload extends Component {
                         className="img-thunbnail mb-3 ml-50"
                         style={{height: 'auto', width: '100%', objectFit: 'cover'}}
                     />
-                    {/* <div className='container'> 
+                    <div className='container'> 
                         <iframe src={fileUrl} style={{height: '500px', width: '100%', objectFit: 'cover'}}></iframe>
-                    </div> */}
+                    </div>
                     <div>
-                    <Document file={fileUrl} onDocumentLoadSuccess={this.onDocumentLoadSuccess}> 
+                    {/* <Document file={{url: fileUrl}} onDocumentLoadSuccess={this.onDocumentLoadSuccess}> 
                         <Page pageNumber={this.state.pageNumber} />
                     </Document>
-                    <p>Page {this.state.pageNumber} of {this.state.numPages}</p>
+                    <p>Page {this.state.pageNumber} of {this.state.numPages}</p> */}
+                    
+                    {/* <object data={fileUrl} type='application/pdf'>
+                        <iframe src={fileUrl}></iframe>
+                    </object> */}
+                    
+                    {/* <FileViewer
+                        fileType={type}
+                        filePath={fileUrl}
+                    /> */}
+
                     </div>
                     <div className='d-inline-block'>
                         <Link
