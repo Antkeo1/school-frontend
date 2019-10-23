@@ -51,7 +51,6 @@ class Upload extends Component {
 
     render() {
         const { user, uploads } = this.state;
-        console.log(user)
         return (
             
             <div className="container">

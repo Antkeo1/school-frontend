@@ -4,12 +4,14 @@ import { create } from "./apiUpload";
 import { Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
 
+
+
 class NewUpload extends Component {
     constructor() {
         super();
         this.state = {
             title: "",
-            body: "",
+            body: '',
             photo: "",
             error: "",
             user: {},
@@ -17,6 +19,8 @@ class NewUpload extends Component {
             loading: false,
             redirectToUpload: false
         };
+        this.onChange = editorState => this.setState({editorState})
+
     }
 
     componentDidMount() {
@@ -101,6 +105,7 @@ class NewUpload extends Component {
                     className="form-control"
                     value={body}
                 />
+                
             </div>
 
             <div className='row'>

@@ -19,6 +19,7 @@ import NewPost from './post/NewPost';
 import EditPost from './post/EditPost'
 
 
+
 const MainRouter = () => {
     return (
         <div>
@@ -40,6 +41,7 @@ const MainRouter = () => {
                 <PrivateRoute exact path='/upload/create' component={NewUpload} />
                 <PrivateRoute exact path='/upload/edit/:uploadId' component={EditUpload} />
                 <Route exact path='/upload/:uploadId' component={SingleUpload} />
+                
 
             </Switch>
         </div>

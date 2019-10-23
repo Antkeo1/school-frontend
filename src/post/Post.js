@@ -57,9 +57,9 @@ class Posts extends Component {
                           }?${new Date().getTime()}`
                         : DefaultPost;
                           
-                        const fileUrl = `${
-                            process.env.REACT_APP_API_URL
-                        }/post/photo/${post._id}`
+                        // const fileUrl = `${
+                        //     process.env.REACT_APP_API_URL
+                        // }/post/photo/${post._id}`
 
                     return (
                         <div id='post' style={{width: '500px'}} className="card col-md-4" key={i}>
@@ -107,7 +107,7 @@ class Posts extends Component {
     };
 
     render() {
-        const { posts, page } = this.state;
+        const { posts } = this.state;
        
         return (
             <div className="container">

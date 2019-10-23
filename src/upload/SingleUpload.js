@@ -3,16 +3,23 @@ import {singleUpload, remove} from './apiUpload'
 import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
 import DefaultPost from "../images/person.png";
+import PDF from 'react-pdf-js'
+import FileViewer from 'react-file-viewer';
+import { Document, Page, pdfjs } from 'react-pdf'
+
 
 
 class SingleUpload extends Component {
     state = {
         upload: '',
+        numPages: null,
+        pageNumber: 1,
         redirectToUpload: false
     }
 
     componentDidMount = () => {
         const uploadId = this.props.match.params.uploadId
+        pdfjs.GlobalWorkerOptions.workerSrc = "//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.1.266/pdf.worker.js"
         singleUpload(uploadId).then(data => {
             if (data.error) {
                 console.log(data.error)
@@ -20,6 +27,10 @@ class SingleUpload extends Component {
                 this.setState({upload: data})
             }
         }) 
+    }
+
+    onDocumentLoadSuccess = ({numPages}) => {
+        this.setState({numPages})
     }
 
     deleteUpload = () => {
@@ -41,6 +52,11 @@ class SingleUpload extends Component {
         }
     }
 
+    onError = e => {
+        console.logError(e, 'error in file viewer')
+    }
+    
+
     renderUpload = (upload) => {
         const uploaderId = upload.uploadedBy
         ? `/user/${upload.uploadedBy._id}`
@@ -59,6 +75,10 @@ class SingleUpload extends Component {
             process.env.REACT_APP_API_URL
         }/upload/photo/${upload._id}`
 
+        const type = 'pdf'
+
+        
+
         return (
                 <div className="column" >
                     
@@ -76,7 +96,7 @@ class SingleUpload extends Component {
                     
                     
                     <p className="card-text">
-                        {upload.title}
+                        {upload.body}
                     </p>
                     <img
                         src={`${
@@ -89,10 +109,15 @@ class SingleUpload extends Component {
                         className="img-thunbnail mb-3 ml-50"
                         style={{height: 'auto', width: '100%', objectFit: 'cover'}}
                     />
-                    <div className='container'> 
+                    {/* <div className='container'> 
                         <iframe src={fileUrl} style={{height: '500px', width: '100%', objectFit: 'cover'}}></iframe>
+                    </div> */}
+                    <div>
+                    <Document file={fileUrl} onDocumentLoadSuccess={this.onDocumentLoadSuccess}> 
+                        <Page pageNumber={this.state.pageNumber} />
+                    </Document>
+                    <p>Page {this.state.pageNumber} of {this.state.numPages}</p>
                     </div>
-
                     <div className='d-inline-block'>
                         <Link
                             to={`/uploads`}

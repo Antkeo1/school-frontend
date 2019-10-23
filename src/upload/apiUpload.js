@@ -63,6 +63,21 @@ export const uploadByUser = (userId, token) => {
         .catch(err => console.log(err));
 };
 
+export const draftUploadByUser = (userId, token) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/uploads/by/${userId}`, {
+        method: "GET",
+        headers: {
+            Accept: "application/json",
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+
 export const remove = (uploadId, token) => {
     return fetch(`${process.env.REACT_APP_API_URL}/upload/${uploadId}`, {
         method: "DELETE",
