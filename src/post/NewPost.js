@@ -2,7 +2,13 @@ import React, { Component } from "react";
 import { isAuthenticated } from "../auth";
 import { create } from "./apiPost";
 import { Redirect } from "react-router-dom";
-
+import {Container, 
+    Header,
+    Body,
+    Content,
+    Aside,
+    Footer
+} from 'react-holy-grail-layout'
 
 class NewPost extends Component {
     constructor() {
@@ -127,25 +133,39 @@ class NewPost extends Component {
         }
 
         return (
-            <div className="container">
-                <h2 className="mt-5 mb-5">Create a new post</h2>
-                <div
-                    className="alert alert-danger"
-                    style={{ display: error ? "" : "none" }}
-                >
-                    {error}
-                </div>
+            <div >
+                <Container>
+                    <Body>
+                        <Content style={{'margin': '10px 0 0 10px'}}>
+                            <h2 className="mt-5 mb-5">Create a new post</h2>
+                            <div
+                                className="alert alert-danger"
+                                style={{ display: error ? "" : "none" }}
+                            >
+                                {error}
+                            </div>
 
-                {loading ? (
-                    <div className="jumbotron text-center">
-                        <h2>Loading...</h2>
-                    </div>
-                ) : (
-                    ""
-                )} 
- 
+                            {loading ? (
+                                <div className="jumbotron text-center">
+                                    <h2>Loading...</h2>
+                                </div>
+                            ) : (
+                                ""
+                            )} 
+            
 
-                {this.newPostForm(title, body)}
+                            {this.newPostForm(title, body)}
+                        </Content>
+
+                        <Aside bg='grey'  right p={2} style={{'border-left': 'solid black', 'padding-top': '25px'}}>
+
+                       </Aside>
+
+                        <Aside bg='grey'  left p={2} style={{'border-right': 'solid black', 'padding-top': '25px'}}>
+
+                        </Aside>
+                    </Body>
+                </Container>
             </div>
         );
     }

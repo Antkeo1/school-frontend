@@ -1,8 +1,14 @@
+Aside {
+  border: solid black
+}
+
 /* Nav */
 
 .navbar-expand {
     margin-bottom: 1rem;
     background: blue;
+    position: fixed;
+    width: 1450px;
   }
   
   .navbar a {
@@ -20,14 +26,44 @@
     margin: 0 0.5rem;
   }
 
+  #users {
+    margin-left: 400px;
+  }
+  
+  /* upload page */
+  #uploadForm {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  #uploadForm a{
+    margin-right: 10px;
+  }
+
+  #uploadForm h3{
+    margin-left: 10px;
+  }
+
+  #title{
+    margin-left: 10px;
+  }
+
+  /* Home */
+  .aside {
+    position: fixed;
+    padding-top: 25px; 
+  }
+
+ .aside a {
+    color: white;
+    padding-bottom: 50px;
+    margin-bottom: 10px;
+  }
+
   #post {
     display: flex;
     align-items: justify-centent;
     margin-left: 300px;
     width: 800px;
-  }
-
-  #uploadForm button{
-    display: flex;
-    align-content: space-between
   }

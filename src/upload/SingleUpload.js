@@ -3,10 +3,14 @@ import {singleUpload, remove} from './apiUpload'
 import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
 import DefaultPost from "../images/person.png";
-import PDF from 'react-pdf-to-image'
-import FileViewer from 'react-file-viewer';
 import { Document, Page, pdfjs } from 'react-pdf'
-
+import {Container, 
+    Header,
+    Body,
+    Content,
+    Aside,
+    Footer
+  } from 'react-holy-grail-layout'
 
 
 class SingleUpload extends Component {
@@ -114,7 +118,7 @@ class SingleUpload extends Component {
                     </div>
                     <div>
                     {/* <Document file={{url: fileUrl}} onDocumentLoadSuccess={this.onDocumentLoadSuccess}> 
-                        <Page pageNumber={this.state.pageNumber} />
+                        <Page size='A4' pageNumber={this.state.pageNumber} />
                     </Document>
                     <p>Page {this.state.pageNumber} of {this.state.numPages}</p> */}
                     
@@ -159,15 +163,31 @@ class SingleUpload extends Component {
 
         const {upload} = this.state
         return (
-            <div className='text-center'>
-                {!upload ? ( 
-                <div className='jumbotron text-center'>
-                    <h2>Loading....</h2>
-                </div>
-                ) : (
-                    this.renderUpload(upload)
-                )
-            }
+            <div>
+                <Container>
+                    <Body>
+                        <Content style={{'margin': '100px 0 0 10px'}} >
+                            <div className='text-center'>
+                                {!upload ? ( 
+                                    <div className='jumbotron text-center'>
+                                        <h2>Loading....</h2>
+                                    </div>
+                                    ) : (
+                                        this.renderUpload(upload)
+                                    )
+                                }
+                            </div>
+                        </Content>
+
+                        <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black', 'padding-top': '25px'}}>
+
+                  </Aside>
+
+                   <Aside bg='grey' right p={2} style={{'width': '1000px', 'border-left': 'solid black', 'padding-top': '25px'}}>
+                     
+                  </Aside>
+                    </Body>
+                </Container>
             </div>
         )
     }

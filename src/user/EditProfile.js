@@ -3,7 +3,13 @@ import {isAuthenticated} from '../auth'
 import {read, update, updateUser} from './apiUser'
 import {Redirect} from 'react-router-dom'
 import DefaultProfile from '../images/avatar.jpeg'
-
+import {Container, 
+    Header,
+    Body,
+    Content,
+    Aside,
+    Footer
+  } from 'react-holy-grail-layout'
 
 class EditProfile extends Component {
     constructor() {
@@ -134,24 +140,38 @@ class EditProfile extends Component {
         
 
         return (
-            <div className='container'>
-                <h2 className='mt-5 mb-5'>Edit Profile</h2>
+            <div>
+                <Container>
+                    <Body>
+                        <Content style={{'margin': '50px 0 0 10px'}}>
+                            <h2 className='mt-5 mb-5'>Edit Profile</h2>
 
-                <div className='alert alert-danger' style={{display: error ? "" : "none"}}>
-                    {error}
-                </div>
+                            <div className='alert alert-danger' style={{display: error ? "" : "none"}}>
+                                {error}
+                            </div>
 
-                {loading ? ( 
-                <div className='jumbotron text-center'>
-                    <h2>Loading....</h2>
-                </div>
-                ) : (
-                    ""
-                )
-            }
-                <img style={{height: '200px', width: 'auto'}} className='img-thumbnail' src={photoUrl} onError={i => (i.target.src = `${DefaultProfile}`)} alt={this.state.name} />
+                            {loading ? ( 
+                            <div className='jumbotron text-center'>
+                                <h2>Loading....</h2>
+                            </div>
+                            ) : (
+                                ""
+                            )
+                            }
+                            <img style={{height: '200px', width: 'auto'}} className='img-thumbnail' src={photoUrl} onError={i => (i.target.src = `${DefaultProfile}`)} alt={this.state.name} />
 
-                {this.editForm(name, email, password, about)}
+                            {this.editForm(name, email, password, about)}
+                        </Content>
+
+                        <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black', 'padding-top': '25px'}}>
+
+                        </Aside>
+
+                        <Aside bg='grey' right p={2} style={{'width': '1000px', 'border-left': 'solid black', 'padding-top': '25px'}}>
+                        
+                        </Aside>
+                    </Body>
+                </Container>
                 
             </div>
         )

@@ -8,7 +8,13 @@ import FollowProfileButton from "./FollowProfileButton";
 import ProfileTabs from "./ProfileTabs";
 import { listByUser } from "../post/apiPost";
 import { uploadByUser } from "../upload/apiUpload";
-
+import {Container, 
+  Header,
+  Body,
+  Content,
+  Aside,
+  Footer
+} from 'react-holy-grail-layout'
 
 class Profile extends Component {
   constructor() {
@@ -106,100 +112,114 @@ class Profile extends Component {
       : DefaultProfile;
 
     return (
-      <div className="container">
-        <h2 className="mt-5 mb-5">Profile</h2>
-        <div className="row">
-          <div className="col-md-4">
-            <img
-              style={{ height: "200px", width: "auto" }}
-              className="img-thumbnail"
-              src={photoUrl}
-              onError={i => (i.target.src = `${DefaultProfile}`)}
-              alt={user.name}
-            />
+      <div>
+        <Container>
+          <Body>
+            <Content style={{'margin': '50px 0 0 10px'}}>
+            <h2 className="mt-5 mb-5">Profile</h2>
+            <div className="row">
+              <div className="col-md-4">
+                <img
+                  style={{ height: "200px", width: "auto" }}
+                  className="img-thumbnail"
+                  src={photoUrl}
+                  onError={i => (i.target.src = `${DefaultProfile}`)}
+                  alt={user.name}
+                />
 
-           
-          </div>
-
-          <div className="col-md-8">
-            <div className="lead mt-2">
-              <p>Hello {user.name}</p>
-              <p>Email: {user.email}</p>
-              <p>{`Member since ${new Date(user.created).toDateString()}`}</p>
-            </div>
-
-            {isAuthenticated().user &&
-            isAuthenticated().user._id === user._id ? (
-              <div className="row">
-                <Link
-                  className="btn btn-raised btn-info mr-5"
-                  to={`/post/create`}
-                >
-                  Create Post
-                </Link>
-
-                <Link
-                  className="btn btn-raised btn-success mr-5"
-                  to={`/user/edit/${user._id}`}
-                >
-                  Edit Profile
-                </Link>
-                <DeleteUser userId={user._id} />
+              
               </div>
-            ) : (
-              <div className='row'>
-                 {isAuthenticated().user &&
-                    isAuthenticated().user._id === user._id ? (
-                      null
-                    ) : (
-                      <div className='mr-5'>
-                        <FollowProfileButton
-                        following={this.state.following}
-                        onButtonClick={this.clickFollowButton}
-                      />
-                      </div>
-                    )}
-                <button  style={{backgroundColor: 'blue', color: 'white'}} className="btn btn-raised mr-5" >Send Message</button>
-              </div>
-            )}
 
-            <div>
-              {isAuthenticated().user &&
-                isAuthenticated().user.role === "admin" && (
-                  <div class="card mt-5">
-                    <div className="card-body">
-                      <h5 className="card-title">Admin</h5>
-                      <p className="mb-2 text-danger">
-                        Edit/Delete as an Admin
-                      </p>
-                      <Link
-                        className="btn btn-raised btn-success mr-5"
-                        to={`/user/edit/${user._id}`}
-                      >
-                        Edit Profile
-                      </Link>
-                      {/*<DeleteUser userId={user._id} />*/}
-                      <DeleteUser />
-                    </div>
+              <div className="col-md-8">
+                <div className="lead mt-2">
+                  <p>Hello {user.name}</p>
+                  <p>Email: {user.email}</p>
+                  <p>{`Member since ${new Date(user.created).toDateString()}`}</p>
+                </div>
+
+                {isAuthenticated().user &&
+                isAuthenticated().user._id === user._id ? (
+                  <div className="row">
+                    <Link
+                      className="btn btn-raised btn-info mr-5"
+                      to={`/post/create`}
+                    >
+                      Create Post
+                    </Link>
+
+                    <Link
+                      className="btn btn-raised btn-success mr-5"
+                      to={`/user/edit/${user._id}`}
+                    >
+                      Edit Profile
+                    </Link>
+                    <DeleteUser userId={user._id} />
+                  </div>
+                ) : (
+                  <div className='row'>
+                    {isAuthenticated().user &&
+                        isAuthenticated().user._id === user._id ? (
+                          null
+                        ) : (
+                          <div className='mr-5'>
+                            <FollowProfileButton
+                            following={this.state.following}
+                            onButtonClick={this.clickFollowButton}
+                          />
+                          </div>
+                        )}
+                    <button  style={{backgroundColor: 'blue', color: 'white'}} className="btn btn-raised mr-5" >Send Message</button>
                   </div>
                 )}
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col md-12 mt-5 mb-5">
-            <hr />
-            <p className="lead">{user.about}</p>
-            <hr />
 
-            <ProfileTabs
-              followers={user.followers}
-              following={user.following}
-              posts={posts}
-              uploads={uploads}
-            />
-          </div>
-        </div>
+                <div>
+                  {isAuthenticated().user &&
+                    isAuthenticated().user.role === "admin" && (
+                      <div class="card mt-5">
+                        <div className="card-body">
+                          <h5 className="card-title">Admin</h5>
+                          <p className="mb-2 text-danger">
+                            Edit/Delete as an Admin
+                          </p>
+                          <Link
+                            className="btn btn-raised btn-success mr-5"
+                            to={`/user/edit/${user._id}`}
+                          >
+                            Edit Profile
+                          </Link>
+                          {/*<DeleteUser userId={user._id} />*/}
+                          <DeleteUser />
+                        </div>
+                      </div>
+                    )}
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col md-12 mt-5 mb-5">
+                <hr />
+                <p className="lead">{user.about}</p>
+                <hr />
+
+                <ProfileTabs
+                  followers={user.followers}
+                  following={user.following}
+                  posts={posts}
+                  uploads={uploads}
+                />
+              </div>
+            </div>
+            </Content>
+
+            <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black', 'padding-top': '25px'}}>
+
+            </Aside>
+
+            <Aside bg='grey' right p={2} style={{'width': '1000px', 'border-left': 'solid black', 'padding-top': '25px'}}>
+              
+            </Aside>
+          </Body>
+        </Container>
       </div>
     );
   }

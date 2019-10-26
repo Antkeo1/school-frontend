@@ -3,7 +3,13 @@ import { isAuthenticated } from "../auth";
 import { create } from "./apiUpload";
 import { Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
-
+import {Container, 
+    Header,
+    Body,
+    Content,
+    Aside,
+    Footer
+  } from 'react-holy-grail-layout'
 
 
 class NewUpload extends Component {
@@ -83,7 +89,7 @@ class NewUpload extends Component {
                 <input
                     onChange={this.handleChange("photo")}
                     type="file"
-                    accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf, .html" 
+                    accept=".xlsx,.xls,image/*,.doc, .zip, .docx,.ppt, .pptx,.txt,.pdf, .html" 
                     className="form-control"
                 />
             </div>
@@ -112,6 +118,7 @@ class NewUpload extends Component {
                 <button
                     onClick={this.clickSubmit}
                     className="btn btn-raised btn-primary"
+                    style={{'margin-left': '10px'}}
                 >
                     Upload File
                 </button>
@@ -136,24 +143,38 @@ class NewUpload extends Component {
         }
 
         return (
-            <div className="container">
-                <div
-                    className="alert alert-danger"
-                    style={{ display: error ? "" : "none" }}
-                >
-                    {error}
-                </div>
+            <div>
+                <Container>
+                    <Body>
+                        <Content style={{'margin': '50px 0 0 10px'}}>
+                        <div
+                            className="alert alert-danger"
+                            style={{ display: error ? "" : "none" }}
+                        >
+                            {error}
+                        </div>
 
-                {loading ? (
-                    <div className="jumbotron text-center">
-                        <h2>Loading...</h2>
-                    </div>
-                ) : (
-                    ""
-                )} 
- 
+                        {loading ? (
+                            <div className="jumbotron text-center">
+                                <h2>Loading...</h2>
+                            </div>
+                        ) : (
+                            ""
+                        )} 
+        
 
-                {this.newPostForm(title, body)}
+                        {this.newPostForm(title, body)}
+                        </Content>
+
+                        <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black', 'padding-top': '25px'}}>
+
+                        </Aside>
+
+                        <Aside bg='grey' right p={2} style={{'width': '1000px', 'border-left': 'solid black', 'padding-top': '25px'}}>
+                        
+                        </Aside>
+                    </Body>
+                </Container>
             </div>
         );
     }

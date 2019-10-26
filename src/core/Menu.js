@@ -11,7 +11,7 @@ const isActive = (history, path) => {
 
 const Menu = ({history}) => {
     return (
-        <nav className="navbar navbar-expand">
+        <nav className="navbar navbar-expand" style={{'border-bottom': 'solid black'}}>
             <div className="container-fluid">
                 <ul className="nav navbar-nav navbar-right">
                     <li className="nav-item">
@@ -40,24 +40,6 @@ const Menu = ({history}) => {
                             <li >
                                 <Link className='nav-link'  to={`/user/${isAuthenticated().user._id}`} style={isActive(history, `/user/${isAuthenticated().user._id}`)} >
                                     {`${isAuthenticated().user.name}'s profile`}
-                                </Link>
-                            </li>
-
-                            <li >
-                                <Link className='nav-link'  to={`/findpeople`} style={isActive(history, `/findpeople`)} >
-                                    Find People
-                                </Link>
-                            </li>
-
-                            <li >
-                                <Link className='nav-link'  to={`/post/create`} style={isActive(history, `/post/create`)} >
-                                    Create Post
-                                </Link>
-                            </li>
-
-                            <li>
-                                <Link className='nav-link'  to={`/uploads`} style={isActive(history, `/upload/create`)} >
-                                    Upload
                                 </Link>
                             </li>
 

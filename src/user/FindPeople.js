@@ -3,6 +3,13 @@ import {findPeople, follow} from './apiUser'
 import {Link} from 'react-router-dom'
 import DefaultProfile from '../images/avatar.jpeg'
 import {isAuthenticated} from '../auth'
+import {Container, 
+    Header,
+    Body,
+    Content,
+    Aside,
+    Footer
+} from 'react-holy-grail-layout'
 
 class FindPeople extends React.Component {
     constructor() {
@@ -67,15 +74,29 @@ class FindPeople extends React.Component {
     render() {
         const {users, open, followMessage} = this.state
         return (
-            <div className='container'>
-               <h2 className='mt-5 mb-5'>People you may know</h2> 
-                {open && (
-                    <div className='alert alert-success'>
-                        <p>{followMessage}</p>
-                    </div>
-                )}
+            <div>
+               <Container>
+                   <Body>
+                       <Content style={{'margin-top': '10px'}}>
+                       <h2 className='mt-5 mb-5'>People you may know</h2> 
+                        {open && (
+                            <div className='alert alert-success'>
+                                <p>{followMessage}</p>
+                            </div>
+                        )}
 
-               {this.renderUsers(users)}
+                        {this.renderUsers(users)}
+                       </Content>
+
+                       <Aside bg='grey'  right p={2} style={{'border-left': 'solid black', 'padding-top': '25px'}}>
+
+                       </Aside>
+
+                        <Aside bg='grey'  left p={2} style={{'border-right': 'solid black', 'padding-top': '25px'}}>
+
+                        </Aside>
+                   </Body>
+               </Container>
             </div>
         )
     }

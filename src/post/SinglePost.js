@@ -3,7 +3,13 @@ import {singlePost, remove} from './apiPost'
 import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
 import DefaultPost from "../images/person.png";
-
+import {Container, 
+    Header,
+    Body,
+    Content,
+    Aside,
+    Footer
+  } from 'react-holy-grail-layout'
 
 class SinglePost extends Component {
     state = {
@@ -84,7 +90,7 @@ class SinglePost extends Component {
                                 (i.target.src = ``)
                             }
                             className="img-thunbnail mb-3 ml-50"
-                            style={{height: 'auto', width: '100%', objectFit: 'cover'}}
+                            style={{height: '500px', width: '500px', objectFit: 'cover'}}
                         />
                    </div>
                     
@@ -120,15 +126,31 @@ class SinglePost extends Component {
 
         const {post} = this.state
         return (
-            <div className='text-center'>
-                {!post ? ( 
-                <div className='jumbotron text-center'>
-                    <h2>Loading....</h2>
-                </div>
-                ) : (
-                    this.renderPost(post)
-                )
-            }
+            <div>
+               <Container>
+                   <Body>
+                       <Content>
+                           <div className='text-center'>
+                       {!post ? ( 
+                            <div className='jumbotron text-center'>
+                                <h2>Loading....</h2>
+                            </div>
+                            ) : (
+                                this.renderPost(post)
+                            )
+                        }
+                            </div>
+                       </Content>
+
+                       <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black', 'padding-top': '25px'}}>
+
+                        </Aside>
+
+                        <Aside bg='grey' right p={2} style={{'width': '1000px', 'border-left': 'solid black', 'padding-top': '25px'}}>
+                        
+                        </Aside> 
+                   </Body>
+               </Container>
             </div>
         )
     }

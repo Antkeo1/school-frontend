@@ -1,9 +1,14 @@
 import React, { Component } from "react";
 import { uploadByUser, read } from "./apiUpload";
-import DefaultPost from "../images/person.png";
 import { Link } from "react-router-dom";
 import { isAuthenticated } from "../auth";
-import NewUpload from "./NewUpload";
+import {Container, 
+  Header,
+  Body,
+  Content,
+  Aside,
+  Footer
+} from 'react-holy-grail-layout'
 
 
 class Upload extends Component {
@@ -52,26 +57,49 @@ class Upload extends Component {
     render() {
         const { user, uploads } = this.state;
         return (
-            
-            <div className="container">
-                {/* < NewUpload user={user}/> */}
-                <div className='navbar' id='uploadForm'>
-                    <h3 className="text-primary">{user.name} has {uploads.length} Uploads</h3>
-                    <Link to={`/upload/create`} className='btn btn-raised btn-primary'>New Upload</Link>
-                </div>
-                <hr />
-                {uploads.map((upload, i) => (
-                    <div key={i}>
+            <div>
+              <Container>
+                
+
+                <Body>
+                  <Content style={{'margin-top': '65px'}}>
+                  <div>
+                      {/* < NewUpload user={user}/> */}
+                      <div id='uploadForm'  >
                         <div>
-                            <Link to={`/upload/${upload._id}`}>
-                                <div>
-                                    <p className="lead">{upload.title}</p>
-                                </div>
-                            </Link>
+                          <h3 className="text-primary">{user.name} has {uploads.length} Files</h3>
                         </div>
-                    </div>
-                ))}
-            </div> 
+                        <div>
+                          <Link to={`/upload/create`} className='btn btn-raised btn-primary'>Add File</Link>
+                        </div>
+                      </div>
+                      <hr />
+                      <div id='title'>
+                        {uploads.map((upload, i) => (
+                            <div key={i}>
+                                <div >
+                                    <Link to={`/upload/${upload._id}`}>
+                                        <div >
+                                            <p className="lead">{upload.title}</p>
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
+                        ))}
+                      </div>
+                  </div> 
+                  </Content>
+                  
+                  <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black', 'padding-top': '25px'}}>
+
+                  </Aside>
+
+                   <Aside bg='grey' right p={2} style={{'width': '1000px', 'border-left': 'solid black', 'padding-top': '25px'}}>
+                     
+                  </Aside>       
+                </Body>
+              </Container>
+            </div>
         );
     }
 }

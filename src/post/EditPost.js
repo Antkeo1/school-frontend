@@ -2,7 +2,13 @@ import React, {Component} from 'react'
 import { singlePost, update } from './apiPost';
 import { isAuthenticated } from "../auth";
 import { Redirect } from "react-router-dom";
-
+import {Container, 
+    Header,
+    Body,
+    Content,
+    Aside,
+    Footer
+  } from 'react-holy-grail-layout'
 
 
 class EditPost extends Component {
@@ -143,24 +149,33 @@ class EditPost extends Component {
         }
 
         return (
-            <div className='container'>
-                <h2 className='mt-5 mb-5'>{title}</h2>
-                <div className='alert alert-danger' style={{display: error ? "" : "none"}}>
-                    {error}
-                </div>
+            <div>
+              <Container>
+                  <Body>
+                      <Content style={{'margin': '60px 0 0 10px'}}>
+                        <div className='alert alert-danger' style={{display: error ? "" : "none"}}>
+                            {error}
+                        </div>
 
-                {loading ? ( 
-                <div className='jumbotron text-center'>
-                    <h2>Loading....</h2>
-                </div>
-                ) : (
-                    ""
-                )
-            }
-                <img style={{height: '200px', width: 'auto'}} className='img-thumbnail' src={`${process.env.REACT_APP_API_URL}/post/photo/${id}`} onError={i => (i.target.src = ``)} alt='' />
+                        {loading ? ( 
+                        <div className='jumbotron text-center'>
+                            <h2>Loading....</h2>
+                        </div>
+                        ) : (
+                            ""
+                        )
+                    }
+                        <img style={{height: '200px', width: 'auto'}} className='img-thumbnail' src={`${process.env.REACT_APP_API_URL}/post/photo/${id}`} onError={i => (i.target.src = ``)} alt='' />
 
 
-                {this.editPostForm(title, body)}
+                        {this.editPostForm(title, body)}
+                      </Content>
+
+                      <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black', 'padding-top': '25px'}}></Aside>
+
+                    <Aside bg='grey' right p={2} style={{'width': '1000px', 'border-left': 'solid black', 'padding-top': '25px'}}></Aside> 
+                  </Body>
+              </Container>
             </div>
         )
     }
