@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {singlePost, remove} from './apiPost'
+import {singlePost, remove, like, unlike} from './apiPost'
 import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
 import DefaultPost from "../images/person.png";
@@ -14,7 +14,15 @@ import {Container,
 class SinglePost extends Component {
     state = {
         post: '',
-        redirectToHome: false
+        redirectToHome: false,
+        like: false,
+        likes: 0
+    }
+
+    checkLike = (likes) => {
+        const userId = isAuthenticated().user._id
+        let match = likes.indexOf(userId) !== -1
+        return match;
     }
 
     componentDidMount = () => {
@@ -23,9 +31,27 @@ class SinglePost extends Component {
             if (data.error) {
                 console.log(data.error)
             } else {
-                this.setState({post: data})
+                this.setState({post: data, likes: data.likes.length, like: this.checkLike(data.likes)})
             }
         }) 
+    }
+
+    likeToggle = () => {
+        let callApi = this.state.like ? unlike : like
+        const userId = isAuthenticated().user._id
+        const postId = this.state.post._id
+        const token = isAuthenticated().token
+        
+        callApi(userId, token, postId).then(data => {
+            if(data.error) {
+                console.log(data.error)
+            } else {
+                this.setState({
+                    like: !this.state.like,
+                    likes: data.likes.length
+                })
+            }
+        })
     }
 
     deletePost = () => {
@@ -51,9 +77,12 @@ class SinglePost extends Component {
         const posterId = post.postedBy
         ? `/user/${post.postedBy._id}`
         : "";
-    const posterName = post.postedBy
+        
+        const posterName = post.postedBy
         ? post.postedBy.name
         : " Unknown";
+
+        const {like, likes} = this.state
 
         const photoUrl = post.postedBy
         ? `${process.env.REACT_APP_API_URL}/user/photo/${
@@ -94,6 +123,17 @@ class SinglePost extends Component {
                         />
                    </div>
                     
+                    {like ? (
+                        <h3 onClick={this.likeToggle}>
+                           <i className='fa fa-thumbs-up text-primary bg-dark' style={{padding: '10px', borderRadius: '50%'}}/>{' '}
+                        {likes} likes
+                    </h3>
+                    ) : (
+                        <h3 onClick={this.likeToggle}>
+                            <i className='fa fa-thumbs-up text-warning bg-dark' style={{padding: '10px', borderRadius: '50%'}}/>{' '}
+                        {likes} likes
+                    </h3>
+                    )}
 
                     <div className='d-inline-block'>
                         <Link
@@ -142,13 +182,49 @@ class SinglePost extends Component {
                             </div>
                        </Content>
 
-                       <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black', 'padding-top': '25px'}}>
+                       <Aside bg='grey' left p={2} style={{'width': '1000px', 'borderRight': 'solid black', 'paddingTop': '25px' }}>
+                            {isAuthenticated() && (
+                                <div>
+                                    <div className="aside">
+                                        <div >
+                                            <Link className=''  to={`/user/${isAuthenticated().user._id}`}  style={{'fontColor': 'white'}}>
+                                                {`${isAuthenticated().user.name}'s profile`}
+                                            </Link>
+                                        </div>
 
+                                       <div>
+                                            <Link className=''  to={`/uploads`}  >
+                                                Uploads
+                                            </Link>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            )}
+                    </Aside>
+
+                        <Aside bg='grey'  right p={2}style={{'borderLeft': 'solid black', 'paddingTop': '25px'}}  >
+                        {isAuthenticated() && (
+                                <div>
+                                    <div className="aside">
+                                        <div >
+                                            <Link className='mb-5'  to={`/findpeople`}  >
+                                                Find People
+                                            </Link>
+                                        </div>
+
+                                        <div >
+                                            <Link className='mb=5'  to={`/post/create`}  >
+                                                Create Post
+                                            </Link>
+                                        </div>
+
+                                       
+
+                                    </div>
+                                </div>
+                            )}
                         </Aside>
-
-                        <Aside bg='grey' right p={2} style={{'width': '1000px', 'border-left': 'solid black', 'padding-top': '25px'}}>
-                        
-                        </Aside> 
                    </Body>
                </Container>
             </div>

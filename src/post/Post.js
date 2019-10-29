@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { list } from "./apiPost";
+import { list, like , unlike} from "./apiPost";
 import DefaultPost from "../images/person.png";
 import { Link } from "react-router-dom";
+import {isAuthenticated} from '../auth'
 
 
 class Posts extends Component {
@@ -9,7 +10,9 @@ class Posts extends Component {
         super();
         this.state = {
             posts: [],
-            page: 1
+            page: 1,
+            like: false,
+            likes: 0
         };
     }
 
@@ -25,8 +28,32 @@ class Posts extends Component {
         });
     };
 
+    checkLike = (likes) => {
+        const userId = isAuthenticated().user._id
+        let match = likes.indexOf(userId) !== -1
+        return match;
+    }
+
     componentDidMount() {
-        this.loadPosts(this.state.page);
+        this.loadPosts(this.state.posts)
+    }
+
+    likeToggle = () => {
+        let callApi = this.state.like ? unlike : like
+        const userId = isAuthenticated().user._id
+        const postId = this.state.post._id
+        const token = isAuthenticated().token
+        
+        callApi(userId, token, postId).then(data => {
+            if(data.error) {
+                console.log(data.error)
+            } else {
+                this.setState({
+                    like: !this.state.like,
+                    likes: data.likes.length
+                })
+            }
+        })
     }
 
     loadMore = number => {
@@ -43,6 +70,7 @@ class Posts extends Component {
         return (
             <div  className="row">
                 {posts.map((post, i) => {
+                    console.log(post)
                     // console.log(post.postedBy.photo)
                     const posterId = post.postedBy
                         ? `/user/${post.postedBy._id}`
@@ -92,6 +120,9 @@ class Posts extends Component {
                                     className="img-thunbnail mb-3"
                                     style={{ height: "200px", width: "100%" }}
                                 />
+                                <p className='text-primary' >
+                                    {post.likes.length} likes
+                                </p>
                                 <Link
                                     to={`/post/${post._id}`}
                                     className="btn btn-raised btn-primary btn-sm"

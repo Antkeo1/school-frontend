@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {isAuthenticated} from '../auth'
 import {read, update, updateUser} from './apiUser'
-import {Redirect} from 'react-router-dom'
+import {Redirect, Link} from 'react-router-dom'
 import DefaultProfile from '../images/avatar.jpeg'
 import {Container, 
     Header,
@@ -163,12 +163,48 @@ class EditProfile extends Component {
                             {this.editForm(name, email, password, about)}
                         </Content>
 
-                        <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black', 'padding-top': '25px'}}>
+                        <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black' }}>
+                            {isAuthenticated() && (
+                                <div>
+                                    <div className="aside">
+                                        <div >
+                                            <Link className=''  to={`/user/${isAuthenticated().user._id}`}  style={{'font-color': 'white'}}>
+                                                {`${isAuthenticated().user.name}'s profile`}
+                                            </Link>
+                                        </div>
 
-                        </Aside>
+                                       <div>
+                                            <Link className=''  to={`/uploads`}  >
+                                                Uploads
+                                            </Link>
+                                        </div>
 
-                        <Aside bg='grey' right p={2} style={{'width': '1000px', 'border-left': 'solid black', 'padding-top': '25px'}}>
-                        
+                                    </div>
+                                </div>
+                            )}
+                    </Aside>
+
+                        <Aside bg='grey'  right p={2}style={{'border-left': 'solid black' }}  >
+                        {isAuthenticated() && (
+                                <div>
+                                    <div className="aside">
+                                        <div >
+                                            <Link className='mb-5'  to={`/findpeople`}  >
+                                                Find People
+                                            </Link>
+                                        </div>
+
+                                        <div >
+                                            <Link className='mb=5'  to={`/post/create`}  >
+                                                Create Post
+                                            </Link>
+                                        </div>
+
+                                       
+
+                                    </div>
+                                </div>
+                            )}
                         </Aside>
                     </Body>
                 </Container>

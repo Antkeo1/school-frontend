@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
-import {singleUpload, remove} from './apiUpload'
+import {singleUpload, remove, like, unlike} from './apiUpload'
 import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
 import DefaultPost from "../images/person.png";
-import { Document, Page, pdfjs } from 'react-pdf'
+// import { Document, Page, pdfjs } from 'react-pdf'
 import {Container, 
     Header,
     Body,
@@ -16,25 +16,38 @@ import {Container,
 class SingleUpload extends Component {
     state = {
         upload: '',
-        numPages: null,
-        pageNumber: 1,
-        redirectToUpload: false
+        redirectToUpload: false,
+        like: false,
+        likes: 0
     }
 
     componentDidMount = () => {
         const uploadId = this.props.match.params.uploadId
-        pdfjs.GlobalWorkerOptions.workerSrc = "//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.1.266/pdf.worker.js"
         singleUpload(uploadId).then(data => {
             if (data.error) {
                 console.log(data.error)
             } else {
-                this.setState({upload: data})
+                this.setState({upload: data, likes: data.likes.length})
             }
         }) 
     }
 
-    onDocumentLoadSuccess = ({numPages}) => {
-        this.setState({numPages})
+    likeToggle = () => {
+        let callApi = this.state.like ? unlike : like
+        const userId = isAuthenticated().user._id
+        const uploadId = this.state.upload._id
+        const token = isAuthenticated().token
+        
+        callApi(userId, token, uploadId).then(data => {
+            if(data.error) {
+                console.log(data.error)
+            } else {
+                this.setState({
+                    like: !this.state.like,
+                    likes: data.likes.length
+                })
+            }
+        })
     }
 
     deleteUpload = () => {
@@ -79,7 +92,7 @@ class SingleUpload extends Component {
             process.env.REACT_APP_API_URL
         }/upload/photo/${upload._id}`
 
-        const type = 'pdf'
+        const {likes, like} = this.state
 
         
 
@@ -116,22 +129,25 @@ class SingleUpload extends Component {
                     <div className='container'> 
                         <iframe src={fileUrl} style={{height: '500px', width: '100%', objectFit: 'cover'}}></iframe>
                     </div>
-                    <div>
-                    {/* <Document file={{url: fileUrl}} onDocumentLoadSuccess={this.onDocumentLoadSuccess}> 
+                    <h3 onClick={this.likeToggle}>
+                        {likes} Likes
+                    </h3>
+                    {/* <div>
+                    <Document file={{url: fileUrl}} onDocumentLoadSuccess={this.onDocumentLoadSuccess}> 
                         <Page size='A4' pageNumber={this.state.pageNumber} />
                     </Document>
-                    <p>Page {this.state.pageNumber} of {this.state.numPages}</p> */}
+                    <p>Page {this.state.pageNumber} of {this.state.numPages}</p> 
                     
-                    {/* <object data={fileUrl} type='application/pdf'>
+                    <object data={fileUrl} type='application/pdf'>
                         <iframe src={fileUrl}></iframe>
-                    </object> */}
+                    </object>
                     
-                    {/* <FileViewer
+                    <FileViewer
                         fileType={type}
                         filePath={fileUrl}
-                    /> */}
+                    />
 
-                    </div>
+                    </div> */}
                     <div className='d-inline-block'>
                         <Link
                             to={`/uploads`}
@@ -179,13 +195,49 @@ class SingleUpload extends Component {
                             </div>
                         </Content>
 
-                        <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black', 'padding-top': '25px'}}>
+                        <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black' }}>
+                            {isAuthenticated() && (
+                                <div>
+                                    <div className="aside">
+                                        <div >
+                                            <Link className=''  to={`/user/${isAuthenticated().user._id}`}  style={{'font-color': 'white'}}>
+                                                {`${isAuthenticated().user.name}'s profile`}
+                                            </Link>
+                                        </div>
 
-                  </Aside>
+                                       <div>
+                                            <Link className=''  to={`/uploads`}  >
+                                                Uploads
+                                            </Link>
+                                        </div>
 
-                   <Aside bg='grey' right p={2} style={{'width': '1000px', 'border-left': 'solid black', 'padding-top': '25px'}}>
-                     
-                  </Aside>
+                                    </div>
+                                </div>
+                            )}
+                    </Aside>
+
+                        <Aside bg='grey'  right p={2}style={{'border-left': 'solid black' }}  >
+                        {isAuthenticated() && (
+                                <div>
+                                    <div className="aside">
+                                        <div >
+                                            <Link className='mb-5'  to={`/findpeople`}  >
+                                                Find People
+                                            </Link>
+                                        </div>
+
+                                        <div >
+                                            <Link className='mb=5'  to={`/post/create`}  >
+                                                Create Post
+                                            </Link>
+                                        </div>
+
+                                       
+
+                                    </div>
+                                </div>
+                            )}
+                        </Aside>
                     </Body>
                 </Container>
             </div>

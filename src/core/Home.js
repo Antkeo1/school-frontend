@@ -24,7 +24,7 @@ class Home extends React.Component {
         return (
             <div >
                 <Container>
-                    <Header bg='grey' p={2} style={{'margin-top': '10px'}}>
+                    <Header bg='grey' p={2} style={{'marginTop': '10px'}}>
                         {/* <h1>Welcome {isAuthenticated().user.name}</h1> */}
                     </Header>
                     
@@ -42,12 +42,12 @@ class Home extends React.Component {
                         )}
                         </Content>
                         
-                     <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black', 'padding-top': '25px' }}>
+                     <Aside bg='grey' left p={2} style={{'width': '1000px', 'borderRight': 'solid black' }}>
                             {isAuthenticated() && (
                                 <div>
                                     <div className="aside">
                                         <div >
-                                            <Link className=''  to={`/user/${isAuthenticated().user._id}`}  style={{'font-color': 'white'}}>
+                                            <Link className=''  to={`/user/${isAuthenticated().user._id}`}  style={{'fontColor': 'white'}}>
                                                 {`${isAuthenticated().user.name}'s profile`}
                                             </Link>
                                         </div>
@@ -63,7 +63,7 @@ class Home extends React.Component {
                             )}
                     </Aside>
 
-                        <Aside bg='grey'  right p={2}style={{'border-left': 'solid black', 'padding-top': '25px'}}  >
+                        <Aside bg='grey'  right p={2}style={{'borderLeft': 'solid black' }}  >
                         {isAuthenticated() && (
                                 <div>
                                     <div className="aside">
@@ -86,9 +86,7 @@ class Home extends React.Component {
                             )}
                         </Aside>
                         
-                        <Footer bg='grey' p={2} >
-                            
-                        </Footer>
+                       
                    
                     </Body>
                 </Container>

@@ -1,6 +1,7 @@
 import React from 'react'
 import {userList} from './apiUser'
 import {Link} from 'react-router-dom'
+import {isAuthenticated} from '../auth'
 import DefaultProfile from '../images/avatar.jpeg'
 import {Container, 
     Header,
@@ -61,12 +62,48 @@ class Users extends React.Component {
                             {this.renderUsers(users)}
                        </Content>
                        
-                       <Aside bg='grey'  right p={2} style={{'border-left': 'solid black', 'padding-top': '25px'}}>
+                       <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black', 'padding-top': '25px' }}>
+                            {isAuthenticated() && (
+                                <div>
+                                    <div className="aside">
+                                        <div >
+                                            <Link className=''  to={`/user/${isAuthenticated().user._id}`}  style={{'font-color': 'white'}}>
+                                                {`${isAuthenticated().user.name}'s profile`}
+                                            </Link>
+                                        </div>
 
-                       </Aside>
+                                       <div>
+                                            <Link className=''  to={`/uploads`}  >
+                                                Uploads
+                                            </Link>
+                                        </div>
 
-                        <Aside bg='grey'  left p={2} style={{'border-right': 'solid black', 'padding-top': '25px'}}>
+                                    </div>
+                                </div>
+                            )}
+                    </Aside>
 
+                        <Aside bg='grey'  right p={2}style={{'border-left': 'solid black', 'padding-top': '25px'}}  >
+                        {isAuthenticated() && (
+                                <div>
+                                    <div className="aside">
+                                        <div >
+                                            <Link className='mb-5'  to={`/findpeople`}  >
+                                                Find People
+                                            </Link>
+                                        </div>
+
+                                        <div >
+                                            <Link className='mb=5'  to={`/post/create`}  >
+                                                Create Post
+                                            </Link>
+                                        </div>
+
+                                       
+
+                                    </div>
+                                </div>
+                            )}
                         </Aside>
 
                    </Body>

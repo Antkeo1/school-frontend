@@ -107,3 +107,35 @@ export const update = (uploadId, token, upload) => {
         })
         .catch(err => console.log(err));
 };
+
+export const like = (userId, token, uploadId) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/upload/like`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId, uploadId})
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+
+export const unlike = (userId, token, uploadId) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/upload/unlike`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId, uploadId})
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};

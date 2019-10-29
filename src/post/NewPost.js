@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { isAuthenticated } from "../auth";
 import { create } from "./apiPost";
 import { Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {Container, 
     Header,
     Body,
@@ -157,12 +158,48 @@ class NewPost extends Component {
                             {this.newPostForm(title, body)}
                         </Content>
 
-                        <Aside bg='grey'  right p={2} style={{'border-left': 'solid black', 'padding-top': '25px'}}>
+                        <Aside bg='grey' left p={2} style={{'width': '1000px', 'borderRight': 'solid black' }}>
+                            {isAuthenticated() && (
+                                <div>
+                                    <div className="aside">
+                                        <div >
+                                            <Link className=''  to={`/user/${isAuthenticated().user._id}`}  style={{'fontColor': 'white'}}>
+                                                {`${isAuthenticated().user.name}'s profile`}
+                                            </Link>
+                                        </div>
 
-                       </Aside>
+                                       <div>
+                                            <Link className=''  to={`/uploads`}  >
+                                                Uploads
+                                            </Link>
+                                        </div>
 
-                        <Aside bg='grey'  left p={2} style={{'border-right': 'solid black', 'padding-top': '25px'}}>
+                                    </div>
+                                </div>
+                            )}
+                    </Aside>
 
+                        <Aside bg='grey'  right p={2}style={{'borderLeft': 'solid black' }}  >
+                        {isAuthenticated() && (
+                                <div>
+                                    <div className="aside">
+                                        <div >
+                                            <Link className='mb-5'  to={`/findpeople`}  >
+                                                Find People
+                                            </Link>
+                                        </div>
+
+                                        <div >
+                                            <Link className='mb=5'  to={`/post/create`}  >
+                                                Create Post
+                                            </Link>
+                                        </div>
+
+                                       
+
+                                    </div>
+                                </div>
+                            )}
                         </Aside>
                     </Body>
                 </Container>
