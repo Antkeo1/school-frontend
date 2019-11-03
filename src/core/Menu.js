@@ -11,7 +11,7 @@ const isActive = (history, path) => {
 
 const Menu = ({history}) => {
     return (
-        <nav className="navbar navbar-expand" style={{'borderBottom': 'solid black'}}>
+        <nav id='nav' className="navbar navbar-expand" style={{'borderBottom': 'solid black'}}>
             <div className="container-fluid">
                 <ul className="nav navbar-nav navbar-right">
                     <li className="nav-item">

@@ -1,5 +1,7 @@
 Aside {
-  border: solid black
+  border: solid black;
+  position: fixed;
+  z-index: 10;
 }
 
 /* Nav */
@@ -9,6 +11,7 @@ Aside {
     background: blue;
     position: fixed;
     width: 1450px;
+    z-index: 10;
   }
   
   .navbar a {
@@ -26,9 +29,7 @@ Aside {
     margin: 0 0.5rem;
   }
 
-  #users {
-    margin-left: 400px;
-  }
+  
   
   /* upload page */
   #uploadForm {
@@ -65,9 +66,19 @@ Aside {
     display: flex;
     align-items: justify-centent;
     margin-left: 300px;
-    width: 800px;
+    width: 700px;
   }
 
 .commentDate{
     margin-left: 450px;
   }
+
+#news:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#comments nav{
+  display: flex;
+  flex-direction: row;
+}

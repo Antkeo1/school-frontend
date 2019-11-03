@@ -70,7 +70,6 @@ class Posts extends Component {
         return (
             <div  className="row">
                 {posts.map((post, i) => {
-                    console.log(post)
                     // console.log(post.postedBy.photo)
                     const posterId = post.postedBy
                         ? `/user/${post.postedBy._id}`
@@ -90,11 +89,11 @@ class Posts extends Component {
                         // }/post/photo/${post._id}`
 
                     return (
-                        <div id='post' style={{width: '500px'}} className="card col-md-4" key={i}>
-                            <div className="card-body" >
+                        <div id='post' className="card col-md-4 mb-4" key={i}>
+                            <div className="container" >
                                 
                                
-                                <p className="font-italic mark">
+                                <p className="font-italic mark mt-4">
                                     Posted by{" "}
 
                                     <Link to={`${posterId}`}>
@@ -125,7 +124,7 @@ class Posts extends Component {
                                 </p>
                                 <Link
                                     to={`/post/${post._id}`}
-                                    className="btn btn-raised btn-primary btn-sm"
+                                    className="btn btn-raised btn-primary btn-sm mb-4"
                                 >
                                     Read more
                                 </Link>

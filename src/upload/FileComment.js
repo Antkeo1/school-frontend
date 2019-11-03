@@ -11,30 +11,75 @@ import {Container,
 
 class FileComment extends React.Component {
     state = {
-        text: ''
+        text: '',
+        error: ''
     }
 
     handleChange = event => {
+        this.setState({error: ''})
         this.setState({text: event.target.value})
+    }
+
+    isValid = () => {
+        const {text} = this.state
+        if(!text.length > 0 || text.length > 80) {
+            this.setState({
+                error: "Comment should not be empty and must be less than 80 characters"
+            })
+            return false
+        }
+        return true
     }
 
     addComment = e => {
         e.preventDefault()
+
+        if(!isAuthenticated()) {
+            this.setState({error: 'Please sign in to leave a comment'})
+            return false
+        }
+
+        if(this.isValid()) {
+            const userId = isAuthenticated().user._id
+            const uploadId = this.props.uploadId
+            const token = isAuthenticated().token
+            
+
+            comment(userId, token, uploadId, {text: this.state.text})
+                .then(data => {
+                    if(data.error) {
+                        console.log(data.error)
+                    } else {
+                        this.setState({text: ''})
+                        // push up data to parent component
+                        this.props.updateComments(data.comments)
+                    }
+                })
+         }
+    }
+
+    deleteComment = (comment) => {
         const userId = isAuthenticated().user._id
         const uploadId = this.props.uploadId
         const token = isAuthenticated().token
         
 
-        comment(userId, token, uploadId, {text: this.state.text})
+        uncomment(userId, token, uploadId, comment)
             .then(data => {
                 if(data.error) {
                     console.log(data.error)
                 } else {
-                    this.setState({text: ''})
                     // push up data to parent component
                     this.props.updateComments(data.comments)
                 }
             })
+    }
+
+    deleteConfirm = (comment) => {
+        let answer = window.confirm('Are you sure you want to delete your comment?')
+        if(answer) {
+            this.deleteComment(comment)
+        }
     }
 
     render() {
@@ -44,6 +89,8 @@ class FileComment extends React.Component {
          }?${new Date().getTime()}`
        
          const {comments} = this.props
+         const {error} = this.state
+
         return (
             <div>
                 <Container>
@@ -53,23 +100,25 @@ class FileComment extends React.Component {
                                 Leave a comment
                             </h2>
 
-                            <form className='container'>
+                            <form className='container' onSubmit={this.addComment} >
                                 <div className='form-group row'>
                                     <img  style={{ height: "40px", borderRadius:'30px', width: "40px" }} className="img-thumbnail" src={photoUrl} alt='' />
-                                    <textarea style={{ width: "950px" }} type='text' onChange={this.handleChange} className='form-control'/>
-                                    <button className="btn btn-raised btn-primary btn-sm" style={{color: 'white', 'margin-left':'900px'}} onClick={this.addComment} >Comment</button>
+                                    <input style={{ width: "950px" }} type='text' placeholder='Leave a comment' value={this.state.text} onChange={this.handleChange} className='form-control'/>
+                                    <button className="btn btn-raised btn-primary btn-sm mt-3" style={{color: 'white', 'margin-left':'900px'}} >Comment</button>
                                 </div>
                             </form>
                            
-                            <hr />
+                            <div className='alert alert-danger' style={{display: error ? "" : "none"}}>
+                                {error}
+                            </div>
 
-                            <div className="col-md-12 col-md-offset-2">
+                            <div className="col-md-12">
                                 <h3 className="text-primary">
                                     {comments.length} Comments
                                 </h3>
-                                <hr />
-                                {comments.reverse().map((comment, i) => (
-                                    <div key={i}>
+                               
+                                {comments.map((comment, i) => (
+                                    <div  className='container' key={i}>
                                         <nav >
                                             <div className='navbar'>
                                             <Link to={`/user/${comment.uploadedBy._id}`}>
@@ -98,7 +147,18 @@ class FileComment extends React.Component {
                                                         {comment.text}
                                                     </p>
                                                 </div>
-                                                <div className="nav navbar-nav navbar-right">{new Date(comment.created).toDateString()}</div>
+                                               
+                                                <span>
+                                                {isAuthenticated().user && 
+                                                    isAuthenticated().user._id === comment.uploadedBy._id &&  
+                                                    <>
+                                                        <button onClick={() => this.deleteConfirm(comment)} className='btn btn-raised btn-warning btn-sm'>
+                                                            Remove
+                                                        </button>
+                                                    </>
+                                                    
+                                                    }
+                                                </span>
                                             </div>
                                         </nav>
                                     </div>
