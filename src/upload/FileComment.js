@@ -152,9 +152,9 @@ class FileComment extends React.Component {
                                                 {isAuthenticated().user && 
                                                     isAuthenticated().user._id === comment.uploadedBy._id &&  
                                                     <>
-                                                        <button onClick={() => this.deleteConfirm(comment)} className='btn btn-raised btn-warning btn-sm'>
+                                                        <span onClick={() => this.deleteConfirm(comment)} className='text-danger'>
                                                             Remove
-                                                        </button>
+                                                        </span>
                                                     </>
                                                     
                                                     }

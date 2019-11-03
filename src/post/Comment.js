@@ -146,9 +146,9 @@ class Comment extends React.Component {
                                                 {isAuthenticated().user && 
                                                     isAuthenticated().user._id === comment.postedBy._id &&  
                                                     <>
-                                                        <button onClick={() => this.deleteConfirm(comment)} className='btn btn-raised btn-warning btn-sm'>
+                                                        <span onClick={() => this.deleteConfirm(comment)} className='text-danger'>
                                                             Remove
-                                                        </button>
+                                                        </span>
                                                     </>
                                                     
                                                     }

@@ -4,6 +4,10 @@ Aside {
   z-index: 10;
 }
 
+span {
+  cursor: pointer;
+}
+
 /* Nav */
 
 .navbar-expand {
