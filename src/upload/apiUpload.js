@@ -33,14 +33,23 @@ export const list = () => {
         method: "GET"
     })
         .then(response => {
-            return response.json();
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(new Blob([blob]))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download')
+            document.body.appendChild(link)
+            link.click()
+            link.parentNode.removeChild(link)
         })
         .catch(err => console.log(err));
 };
 
 export const singleUpload = (uploadId) => {
     return fetch(`${process.env.REACT_APP_API_URL}/upload/${uploadId}`, {
-        method: "GET"
+        method: "GET",
     })
         .then(response => {
             return response.json();
@@ -133,6 +142,38 @@ export const unlike = (userId, token, uploadId) => {
             Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({userId, uploadId})
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+
+export const comment = (userId, token, uploadId, comment) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/upload/comment`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId, uploadId, comment})
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+
+export const uncomment = (userId, token, uploadId, comment) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/upload/uncomment`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId, uploadId, comment})
     })
         .then(response => {
             return response.json();

@@ -3,24 +3,25 @@ import {singlePost, remove, like, unlike} from './apiPost'
 import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
 import DefaultPost from "../images/person.png";
+import Comment from './Comment'
 import {Container, 
-    Header,
     Body,
     Content,
     Aside,
-    Footer
   } from 'react-holy-grail-layout'
 
 class SinglePost extends Component {
     state = {
         post: '',
         redirectToHome: false,
+        redirectToSignIn: false,
         like: false,
-        likes: 0
+        likes: 0,
+        comments: []
     }
 
     checkLike = (likes) => {
-        const userId = isAuthenticated().user._id
+        const userId = isAuthenticated() && isAuthenticated().user._id
         let match = likes.indexOf(userId) !== -1
         return match;
     }
@@ -31,12 +32,22 @@ class SinglePost extends Component {
             if (data.error) {
                 console.log(data.error)
             } else {
-                this.setState({post: data, likes: data.likes.length, like: this.checkLike(data.likes)})
+                this.setState({post: data, likes: data.likes.length, like: this.checkLike(data.likes), comments: data.comments})
             }
         }) 
     }
 
+    updateComments = comments => {
+        this.setState({comments})
+    }
+
     likeToggle = () => {
+        if(!isAuthenticated()) {
+            this.setState({
+                redirectToSignIn: true
+            })
+            return false
+        }
         let callApi = this.state.like ? unlike : like
         const userId = isAuthenticated().user._id
         const postId = this.state.post._id
@@ -160,30 +171,40 @@ class SinglePost extends Component {
     }
 
     render() {
-        if(this.state.redirectToHome) {
+        const {post, comments, redirectToHome, redirectToSignIn} = this.state
+        console.log(comments)
+        if(redirectToHome) {
             return <Redirect to={`/`} />
+         } else if(redirectToSignIn) {
+            return <Redirect to={`/signin`} />
          }
 
-        const {post} = this.state
         return (
             <div>
                <Container>
                    <Body>
                        <Content>
                            <div className='text-center'>
-                       {!post ? ( 
-                            <div className='jumbotron text-center'>
-                                <h2>Loading....</h2>
-                            </div>
-                            ) : (
-                                this.renderPost(post)
-                            )
-                        }
+                                {!post ? ( 
+                                        <div className='jumbotron text-center'>
+                                            <h2>Loading....</h2>
+                                        </div>
+                                        ) : (
+                                            this.renderPost(post)
+                                        )
+                                    }
+                                   <div>
+                                        
+
+                                        <Comment postId={post._id} comments={comments} updateComments={this.updateComments}/>
+                                        
+                                    </div> 
+                               
                             </div>
                        </Content>
 
                        <Aside bg='grey' left p={2} style={{'width': '1000px', 'borderRight': 'solid black', 'paddingTop': '25px' }}>
-                            {isAuthenticated() && (
+                       {isAuthenticated() && (
                                 <div>
                                     <div className="aside">
                                         <div >
@@ -193,7 +214,7 @@ class SinglePost extends Component {
                                         </div>
 
                                        <div>
-                                            <Link className=''  to={`/uploads`}  >
+                                            <Link className=''  to={`/uploads/by/${isAuthenticated().user._id}`}  >
                                                 Uploads
                                             </Link>
                                         </div>

@@ -4,11 +4,9 @@ import {Link} from 'react-router-dom'
 import DefaultProfile from '../images/avatar.jpeg'
 import {isAuthenticated} from '../auth'
 import {Container, 
-    Header,
     Body,
     Content,
     Aside,
-    Footer
 } from 'react-holy-grail-layout'
 
 class FindPeople extends React.Component {
@@ -89,17 +87,17 @@ class FindPeople extends React.Component {
                        </Content>
 
                        <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black' }}>
-                            {isAuthenticated() && (
+                       {isAuthenticated() && (
                                 <div>
                                     <div className="aside">
                                         <div >
-                                            <Link className=''  to={`/user/${isAuthenticated().user._id}`}  style={{'font-color': 'white'}}>
+                                            <Link className=''  to={`/user/${isAuthenticated().user._id}`}  style={{'fontColor': 'white'}}>
                                                 {`${isAuthenticated().user.name}'s profile`}
                                             </Link>
                                         </div>
 
                                        <div>
-                                            <Link className=''  to={`/uploads`}  >
+                                            <Link className=''  to={`/uploads/by/${isAuthenticated().user._id}`}  >
                                                 Uploads
                                             </Link>
                                         </div>

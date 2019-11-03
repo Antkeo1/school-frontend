@@ -3,13 +3,12 @@ import {singleUpload, remove, like, unlike} from './apiUpload'
 import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
 import DefaultPost from "../images/person.png";
+import FileComment from './FileComment'
 // import { Document, Page, pdfjs } from 'react-pdf'
 import {Container, 
-    Header,
     Body,
     Content,
     Aside,
-    Footer
   } from 'react-holy-grail-layout'
 
 
@@ -17,8 +16,16 @@ class SingleUpload extends Component {
     state = {
         upload: '',
         redirectToUpload: false,
+        redirectToSignIn: false,
         like: false,
-        likes: 0
+        likes: 0,
+        comments: []
+    }
+    
+    checkLike = (likes) => {
+        const userId = isAuthenticated() && isAuthenticated().user._id
+        let match = likes.indexOf(userId) !== -1
+        return match;
     }
 
     componentDidMount = () => {
@@ -27,12 +34,27 @@ class SingleUpload extends Component {
             if (data.error) {
                 console.log(data.error)
             } else {
-                this.setState({upload: data, likes: data.likes.length})
+                this.setState({
+                    upload: data, 
+                    likes: data.likes.length, 
+                    like: this.checkLike(data.likes),
+                    comments: data.comments
+                })
             }
         }) 
     }
 
+    updateComments = comments => {
+        this.setState({comments})
+    }
+
     likeToggle = () => {
+        if(!isAuthenticated()) {
+            this.setState({
+                redirectToSignIn: true
+            })
+            return false
+        }
         let callApi = this.state.like ? unlike : like
         const userId = isAuthenticated().user._id
         const uploadId = this.state.upload._id
@@ -126,12 +148,23 @@ class SingleUpload extends Component {
                         className="img-thunbnail mb-3 ml-50"
                         style={{height: 'auto', width: '100%', objectFit: 'cover'}}
                     />
+                    
                     <div className='container'> 
-                        <iframe src={fileUrl} style={{height: '500px', width: '100%', objectFit: 'cover'}}></iframe>
+                        <iframe src={fileUrl} title='file' style={{height: '100vh', width: '100%'}}></iframe>
                     </div>
-                    <h3 onClick={this.likeToggle}>
-                        {likes} Likes
+                   
+                    {like ? (
+                        <h3 onClick={this.likeToggle}>
+                           <i className='fa fa-thumbs-up text-primary bg-dark' style={{padding: '10px', borderRadius: '50%'}}/>{' '}
+                        {likes} likes
                     </h3>
+                    ) : (
+                        <h3 onClick={this.likeToggle}>
+                            <i className='fa fa-thumbs-up text-warning bg-dark' style={{padding: '10px', borderRadius: '50%'}}/>{' '}
+                        {likes} unlike
+                    </h3>
+                    )}
+                    
                     {/* <div>
                     <Document file={{url: fileUrl}} onDocumentLoadSuccess={this.onDocumentLoadSuccess}> 
                         <Page size='A4' pageNumber={this.state.pageNumber} />
@@ -172,12 +205,15 @@ class SingleUpload extends Component {
         );
     }
 
-    render() {
-        if(this.state.redirectToUpload) {
-            return <Redirect to={`/uploads`} />
+    render(){
+        const {upload, comments, redirectToSignIn, redirectToUpload, } = this.state
+        console.log(comments)
+        if(redirectToUpload ) {
+            return <Redirect to={`/uploads/by/${isAuthenticated().user._id}`} />
+         } else if (redirectToSignIn) {
+             return <Redirect to={`/signin`} />
          }
-
-        const {upload} = this.state
+         
         return (
             <div>
                 <Container>
@@ -192,21 +228,24 @@ class SingleUpload extends Component {
                                         this.renderUpload(upload)
                                     )
                                 }
+                                <div>
+                                    <FileComment uploadId={upload._id} comments={comments} updateComments={this.updateComments}/>
+                                </div>
                             </div>
                         </Content>
 
                         <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black' }}>
-                            {isAuthenticated() && (
+                        {isAuthenticated() && (
                                 <div>
                                     <div className="aside">
                                         <div >
-                                            <Link className=''  to={`/user/${isAuthenticated().user._id}`}  style={{'font-color': 'white'}}>
+                                            <Link className=''  to={`/user/${isAuthenticated().user._id}`}  style={{'fontColor': 'white'}}>
                                                 {`${isAuthenticated().user.name}'s profile`}
                                             </Link>
                                         </div>
 
                                        <div>
-                                            <Link className=''  to={`/uploads`}  >
+                                            <Link className=''  to={`/uploads/by/${isAuthenticated().user._id}`}  >
                                                 Uploads
                                             </Link>
                                         </div>

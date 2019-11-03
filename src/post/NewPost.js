@@ -4,11 +4,9 @@ import { create } from "./apiPost";
 import { Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
 import {Container, 
-    Header,
     Body,
     Content,
     Aside,
-    Footer
 } from 'react-holy-grail-layout'
 
 class NewPost extends Component {
@@ -159,7 +157,7 @@ class NewPost extends Component {
                         </Content>
 
                         <Aside bg='grey' left p={2} style={{'width': '1000px', 'borderRight': 'solid black' }}>
-                            {isAuthenticated() && (
+                        {isAuthenticated() && (
                                 <div>
                                     <div className="aside">
                                         <div >
@@ -169,7 +167,7 @@ class NewPost extends Component {
                                         </div>
 
                                        <div>
-                                            <Link className=''  to={`/uploads`}  >
+                                            <Link className=''  to={`/uploads/by/${isAuthenticated().user._id}`}  >
                                                 Uploads
                                             </Link>
                                         </div>

@@ -4,11 +4,9 @@ import { create } from "./apiUpload";
 import { Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
 import {Container, 
-    Header,
     Body,
     Content,
     Aside,
-    Footer
   } from 'react-holy-grail-layout'
 
 
@@ -89,7 +87,7 @@ class NewUpload extends Component {
                 <input
                     onChange={this.handleChange("photo")}
                     type="file"
-                    accept=".xlsx,.xls,image/*,.doc, .zip, .docx,.ppt, .pptx,.txt,.pdf, .html" 
+                    accept=".xlsx,.xls,image/*,.doc, .zip, .docx,.ppt, .pptx,.txt,.pdf, .html, .rtf" 
                     className="form-control"
                 />
             </div>
@@ -131,15 +129,13 @@ class NewUpload extends Component {
         const {
             title,
             body,
-            photo,
-            user,
             error,
             loading,
             redirectToUpload
         } = this.state;
 
         if (redirectToUpload) {
-            return <Redirect to={`/uploads`} />;
+            return <Redirect to={`/uploads/by/${isAuthenticated().user._id}`} />;
         }
 
         return (
@@ -167,17 +163,17 @@ class NewUpload extends Component {
                         </Content>
 
                         <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black' }}>
-                            {isAuthenticated() && (
+                        {isAuthenticated() && (
                                 <div>
                                     <div className="aside">
                                         <div >
-                                            <Link className=''  to={`/user/${isAuthenticated().user._id}`}  style={{'font-color': 'white'}}>
+                                            <Link className=''  to={`/user/${isAuthenticated().user._id}`}  style={{'fontColor': 'white'}}>
                                                 {`${isAuthenticated().user.name}'s profile`}
                                             </Link>
                                         </div>
 
                                        <div>
-                                            <Link className=''  to={`/uploads`}  >
+                                            <Link className=''  to={`/uploads/by/${isAuthenticated().user._id}`}  >
                                                 Uploads
                                             </Link>
                                         </div>

@@ -9,11 +9,9 @@ import ProfileTabs from "./ProfileTabs";
 import { listByUser } from "../post/apiPost";
 import { uploadByUser } from "../upload/apiUpload";
 import {Container, 
-  Header,
   Body,
   Content,
-  Aside,
-  Footer
+  Aside
 } from 'react-holy-grail-layout'
 
 class Profile extends Component {
@@ -147,6 +145,10 @@ class Profile extends Component {
                       Create Post
                     </Link>
 
+                   
+                    
+                                        
+
                     <Link
                       className="btn btn-raised btn-success mr-5"
                       to={`/user/edit/${user._id}`}
@@ -169,6 +171,11 @@ class Profile extends Component {
                           </div>
                         )}
                     <button  style={{backgroundColor: 'blue', color: 'white'}} className="btn btn-raised mr-5" >Send Message</button>
+                    <Link className=''  to={`/uploads/by/${user._id}`}  >
+                      <button style={{backgroundColor: 'blue', color: 'white'}} className="btn btn-raised mr-5">
+                        Uploads
+                      </button>
+                    </Link>
                   </div>
                 )}
 
@@ -212,17 +219,17 @@ class Profile extends Component {
             </Content>
 
             <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black', 'padding-top': '25px' }}>
-                            {isAuthenticated() && (
+            {isAuthenticated() && (
                                 <div>
                                     <div className="aside">
                                         <div >
-                                            <Link className=''  to={`/user/${isAuthenticated().user._id}`}  style={{'font-color': 'white'}}>
+                                            <Link className=''  to={`/user/${isAuthenticated().user._id}`}  style={{'fontColor': 'white'}}>
                                                 {`${isAuthenticated().user.name}'s profile`}
                                             </Link>
                                         </div>
 
                                        <div>
-                                            <Link className=''  to={`/uploads`}  >
+                                            <Link className=''  to={`/uploads/by/${isAuthenticated().user._id}`}  >
                                                 Uploads
                                             </Link>
                                         </div>

@@ -9,8 +9,7 @@ import FindPeople from './user/FindPeople'
 import SinglePost from './post/SinglePost'
 import EditUpload from './upload/EditUpload'
 import SingleUpload from './upload/SingleUpload'
-import Upload from './upload/Upload'
-
+import UserUpload from './upload/UserUpload'
 import NewUpload from './upload/NewUpload'
 import Signup from './user/Signup'
 import Signin from './user/Signin'
@@ -37,11 +36,11 @@ const MainRouter = () => {
                 <Route exact path='/post/:postId' component={SinglePost} />
                 <PrivateRoute exact path='/post/edit/:postId' component={EditPost} />
               
-                <PrivateRoute exact path='/uploads' component={Upload} />
+                {/* <PrivateRoute exact path='/uploads/by/:userId' component={Upload} /> */}
                 <PrivateRoute exact path='/upload/create' component={NewUpload} />
                 <PrivateRoute exact path='/upload/edit/:uploadId' component={EditUpload} />
                 <Route exact path='/upload/:uploadId' component={SingleUpload} />
-                
+                <Route exact path='/uploads/by/:userId' component={UserUpload} />
 
             </Switch>
         </div>

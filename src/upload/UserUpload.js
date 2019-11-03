@@ -5,11 +5,11 @@ import { isAuthenticated } from "../auth";
 import {Container, 
   Body,
   Content,
-  Aside
+  Aside,
 } from 'react-holy-grail-layout'
 
 
-class Upload extends Component {
+class UserUpload extends Component {
     constructor() {
         super();
         this.state = {
@@ -42,15 +42,16 @@ class Upload extends Component {
         });
       };
 
-    componentDidMount() {
-        const userId = isAuthenticated().user._id;
-        this.init(userId);
-    }
-
-    componentWillReceiveProps(props) {
-        const userId = isAuthenticated().user._id;
+      componentDidMount() {
+        const userId = this.props.match.params.userId;
         this.init(userId);
       }
+    
+      componentWillReceiveProps(props) {
+        const userId = props.match.params.userId;
+        this.init(userId);
+      }
+      
 
     render() {
         const { user, uploads } = this.state;
@@ -68,21 +69,23 @@ class Upload extends Component {
                         <div>
                           <h3 className="text-primary">{user.name} has {uploads.length} Files</h3>
                         </div>
-                        <div>
-                          <Link to={`/upload/create`} className='btn btn-raised btn-primary'>Add File</Link>
-                        </div>
+                        
+                        {isAuthenticated().user && isAuthenticated().user._id === user._id ? ( 
+                          <div>
+                            <Link to={`/upload/create`} className='btn btn-raised btn-primary'>Add File</Link>
+                          </div> 
+                          ) : ( null)
+                         }
+
                       </div>
                       <hr />
                       <div id='title'>
                         {uploads.reverse().map((upload, i) => (
                             <div key={i}>
                               
-                                <div >
-                                    <Link to={`/upload/${upload._id}`} 
-                                    >
-                                        
-                                            <p className="lead">{upload.title}</p>
-                                        
+                                <div className='column'>
+                                    <Link to={`/upload/${upload._id}`}>
+                                      <p className="lead">{upload.title}  {upload.body}</p>
                                     </Link>
                                 </div>
                             </div>
@@ -92,7 +95,7 @@ class Upload extends Component {
                   </Content>
                   
                   <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black' }}>
-                  {isAuthenticated() && (
+                  {isAuthenticated() &&  (
                                 <div>
                                     <div className="aside">
                                         <div >
@@ -141,6 +144,6 @@ class Upload extends Component {
     }
 }
 
-export default Upload;
+export default UserUpload;
 
 

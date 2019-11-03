@@ -7,7 +7,6 @@ import {Container,
             Body,
             Content,
             Aside,
-            Footer
         } from 'react-holy-grail-layout'
 
 
@@ -53,7 +52,7 @@ class Home extends React.Component {
                                         </div>
 
                                        <div>
-                                            <Link className=''  to={`/uploads`}  >
+                                            <Link className=''  to={`/uploads/by/${isAuthenticated().user._id}`}  >
                                                 Uploads
                                             </Link>
                                         </div>
