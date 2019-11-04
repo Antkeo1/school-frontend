@@ -211,7 +211,7 @@ class Profile extends Component {
                 <ProfileTabs
                   followers={user.followers}
                   following={user.following}
-                  posts={posts}
+                  posts={posts.reverse()}
                   uploads={uploads}
                 />
               </div>

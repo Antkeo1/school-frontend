@@ -143,12 +143,14 @@ class Comment extends React.Component {
                                                     </Link>
                                                     <p>{comment.text}</p>
                                                     <span>
+                                                    <div className="nav navbar-nav navbar-right">{new Date(comment.created).toDateString()}</div>
                                                 {isAuthenticated().user && 
                                                     isAuthenticated().user._id === comment.postedBy._id &&  
                                                     <>
                                                         <span onClick={() => this.deleteConfirm(comment)} className='text-danger'>
                                                             Remove
                                                         </span>
+                                                        
                                                     </>
                                                     
                                                     }

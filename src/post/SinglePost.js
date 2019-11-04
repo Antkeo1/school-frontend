@@ -168,7 +168,7 @@ class SinglePost extends Component {
 
     render() {
         const {post, comments, redirectToHome, redirectToSignIn} = this.state
-        console.log(comments)
+        
         if(redirectToHome) {
             return <Redirect to={`/`} />
          } else if(redirectToSignIn) {

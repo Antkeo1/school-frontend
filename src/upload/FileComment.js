@@ -3,11 +3,7 @@ import { isAuthenticated } from "../auth";
 import {comment, uncomment} from './apiUpload'
 import { Link } from "react-router-dom";
 import DefaultProfile from "../images/avatar.jpeg";
-import {Container, 
-    Body,
-    Content,
-    
-  } from 'react-holy-grail-layout'
+import {Container, Body, Content } from 'react-holy-grail-layout'
 
 class FileComment extends React.Component {
     state = {
@@ -22,9 +18,9 @@ class FileComment extends React.Component {
 
     isValid = () => {
         const {text} = this.state
-        if(!text.length > 0 || text.length > 80) {
+        if(!text.length > 0 || text.length > 150) {
             this.setState({
-                error: "Comment should not be empty and must be less than 80 characters"
+                error: "Comment should not be empty and must be less than 150 characters"
             })
             return false
         }
@@ -103,7 +99,7 @@ class FileComment extends React.Component {
                             <form className='container' onSubmit={this.addComment} >
                                 <div className='form-group row'>
                                     <img  style={{ height: "40px", borderRadius:'30px', width: "40px" }} className="img-thumbnail" src={photoUrl} alt='' />
-                                    <input style={{ width: "950px" }} type='text' placeholder='Leave a comment' value={this.state.text} onChange={this.handleChange} className='form-control'/>
+                                    <textarea style={{ width: "950px" }} type='text' placeholder='Leave a comment' value={this.state.text} onChange={this.handleChange} className='form-control'/>
                                     <button className="btn btn-raised btn-primary btn-sm mt-3" style={{color: 'white', 'margin-left':'900px'}} >Comment</button>
                                 </div>
                             </form>
@@ -112,13 +108,13 @@ class FileComment extends React.Component {
                                 {error}
                             </div>
 
-                            <div className="col-md-12">
+                            <div className="col-md-12 col-md-offset-2">
                                 <h3 className="text-primary">
                                     {comments.length} Comments
                                 </h3>
                                
                                 {comments.map((comment, i) => (
-                                    <div  className='container' key={i}>
+                                    <div key={i}>
                                         <nav >
                                             <div className='navbar'>
                                             <Link to={`/user/${comment.uploadedBy._id}`}>
@@ -142,19 +138,23 @@ class FileComment extends React.Component {
                                                         {comment.uploadedBy.name}
                                                     </p>
                                             </Link>
-                                                <div>
-                                                    <p className="lead mr-5">
+                                                
+                                                    <p >
                                                         {comment.text}
                                                     </p>
-                                                </div>
+                                               
                                                
                                                 <span>
+                                                <div className="nav navbar-nav navbar-right">{new Date(comment.created).toDateString()}</div>
                                                 {isAuthenticated().user && 
                                                     isAuthenticated().user._id === comment.uploadedBy._id &&  
                                                     <>
-                                                        <span onClick={() => this.deleteConfirm(comment)} className='text-danger'>
+                                                        
+                                                        <span onClick={() => this.deleteConfirm(comment)} className='text-danger '>
                                                             Remove
                                                         </span>
+                                                        
+                                                    
                                                     </>
                                                     
                                                     }
