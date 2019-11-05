@@ -36,7 +36,8 @@ class Side extends Component {
                         <Content>
                             <MainRouter />
                         </Content>
-                      <Aside bg='grey' left p={2} style={{'width': '1000px', 'border-right': 'solid black' }}>
+                      
+                      <Aside bg='#d4d9d6' left p={2} style={{'width': '1000px' }}>
                       {isAuthenticated() && (
                                 <div>
                                     <div className="aside">
@@ -53,7 +54,7 @@ class Side extends Component {
                                         </div>
 
                                         <div>
-                                            <a id='news' style={{color: 'white'}} onClick={() => {
+                                            <a id='news' style={{color: 'black'}} onClick={() => {
                                                 window.open('https://www.usnews.com/news/education-news', '_blank')
                                             }} >News</a>
                                         </div>
@@ -63,7 +64,7 @@ class Side extends Component {
                             )}
                     </Aside>
 
-                        <Aside bg='grey'  right p={2}style={{'border-left': 'solid black' }}  >
+                        <Aside bg='#d4d9d6'  right p={2}  >
                         {isAuthenticated() && (
                                 <div>
                                     <div className="aside">
@@ -79,11 +80,28 @@ class Side extends Component {
                                             </Link>
                                         </div>
 
+                                        {isAuthenticated() && isAuthenticated().user.role === 'admin' && (
+                                            <div >
+                                                <div >
+                                                    <div>
+                                                        <Link 
+                                                            to={'/admin'}
+                                                            className='mb=5'
+                                                        >
+                                                            Admin Dashboard
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            )
+                                        }
                                        
 
                                     </div>
                                 </div>
                             )}
+
+                      
                         </Aside>
                   </Body>
               </Container>

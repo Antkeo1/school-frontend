@@ -98,7 +98,6 @@ class FileComment extends React.Component {
 
                             <form className='container' onSubmit={this.addComment} >
                                 <div className='form-group row'>
-                                    <img  style={{ height: "40px", borderRadius:'30px', width: "40px" }} className="img-thumbnail" src={photoUrl} alt='' />
                                     <textarea style={{ width: "950px" }} type='text' placeholder='Leave a comment' value={this.state.text} onChange={this.handleChange} className='form-control'/>
                                     <button className="btn btn-raised btn-primary btn-sm mt-3" style={{color: 'white', 'margin-left':'900px'}} >Comment</button>
                                 </div>

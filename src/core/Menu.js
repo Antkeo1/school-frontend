@@ -11,17 +11,30 @@ const isActive = (history, path) => {
 
 const Menu = ({history}) => {
     return (
-        <nav id='nav' className="navbar navbar-expand" style={{'borderBottom': 'solid black'}}>
+        <nav id='nav' className="navbar navbar-expand mb-5" style={{'borderBottom': 'solid black 1px'}}>
             <div className="container-fluid">
                 <ul className="nav navbar-nav navbar-right">
                     <li className="nav-item">
                         <Link className='nav-link' style={isActive(history, '/')} to='/'>Home</Link>
                     </li>
+                    {isAuthenticated() && isAuthenticated().user.role === 'admin' && (
+                                
+                                     <li className="nav-item">
+                                        <Link
+                                            className={history.location.pathname === '/users' ? 'active nav-link' : 'not-active nav-link'}
+                                            to="/users"
+                                        >
+                                            Users
+                                        </Link>
+                                    </li>
+                                
+                                )
+                            }
 
-                    <li className="nav-item">
-                        <Link className='nav-link' style={isActive(history, '/users')} to='/users'>Users</Link>
-                    </li>
+                   
                 </ul>
+
+                
                     
                 {!isAuthenticated() && (
                     <ul className="nav navbar-nav navbar-right">
@@ -43,11 +56,29 @@ const Menu = ({history}) => {
                                 </Link>
                             </li>
 
+                            {isAuthenticated() && isAuthenticated().user.role === 'admin' && (
+                                <ul className="nav navbar-nav navbar-left">
+                                    <li>
+                                        <Link 
+                                            to={'/admin'}
+                                            style={isActive(history, '/admin')}
+                                            className='nav-link'
+                                        >
+                                            Admin
+                                        </Link>
+                                    </li>
+                                </ul>
+                                )
+                            }
+
                             <li >
                                 <span className='nav-link' style={{cursor: 'pointer', color: '#fff'}} onClick={() => signout(() => history.push('/'))}>Sign Out</span>
                             </li>
+                            
                         </ul>
                     )}
+
+                    
             </div>
         </nav>
     )

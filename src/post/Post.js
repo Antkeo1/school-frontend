@@ -3,6 +3,7 @@ import { list, like , unlike} from "./apiPost";
 import DefaultPost from "../images/person.png";
 import { Link } from "react-router-dom";
 import {isAuthenticated} from '../auth'
+import { Content } from "react-holy-grail-layout";
 
 
 class Posts extends Component {
@@ -68,7 +69,7 @@ class Posts extends Component {
 
     renderPosts = posts => {
         return (
-            <div  className="row">
+            <div  id='post' className='row container'>
                 {posts.map((post, i) => {
                     // console.log(post.postedBy.photo)
                     const posterId = post.postedBy
@@ -89,8 +90,8 @@ class Posts extends Component {
                         // }/post/photo/${post._id}`
 
                     return (
-                        <div id='post' className="card col-md-4 mb-4" key={i}>
-                            <div className="container" >
+                        <div  className="card col-md-6 mb-4" key={i}>
+                            <div  >
                                 
                                
                                 <p className="font-italic mark mt-4">
@@ -101,6 +102,7 @@ class Posts extends Component {
 
                                         {posterName}{" "}
                                     </Link>
+                                    on{' '}
                                     {new Date(post.created).toDateString()}
                                 </p>
                                 <br />
@@ -144,9 +146,9 @@ class Posts extends Component {
                 <h2 className="mt-5 mb-5">
                     {!posts.length ? "Loading..." : ""}
                 </h2>
-
-                {this.renderPosts(posts)}
-
+                <Content  >
+                    {this.renderPosts(posts)}
+                </Content>
                 
             </div>
         );

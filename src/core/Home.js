@@ -1,12 +1,12 @@
 import React from 'react'
 import Post from '../post/Post'
 import {isAuthenticated} from '../auth'
-import {Link, withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import {Container, 
             Header,
             Body,
             Content,
-            Aside,
+        
         } from 'react-holy-grail-layout'
 
 

@@ -18,6 +18,7 @@ class EditProfile extends Component {
             email: '',
             password: '',
             error: '',
+            role: '',
             redirectToProfile: false,
             fileSize: 0,
             loading: false,
@@ -28,10 +29,11 @@ class EditProfile extends Component {
     init = (userId) => {
         const token = isAuthenticated().token
         read(userId, token).then(data => {
+            console.log(data.role)
             if (data.error) {
                 this.setState({redirectToProfile: true})
             } else {
-                this.setState({id: data._id, name: data.name, email: data.email, error: '', about: data.about})
+                this.setState({id: data._id, name: data.name, email: data.email, role: data.role, error: '', about: data.about})
             }
         })
     }
@@ -82,9 +84,14 @@ class EditProfile extends Component {
             const userId = this.props.match.params.userId
             const token = isAuthenticated().token
     
-            update(userId, token, this.userData)
-            .then(data => {
-                if(data.error) this.setState({error: data.error}) 
+            update(userId, token, this.userData).then(data => {
+                if(data.error) {
+                    this.setState({error: data.error})
+                } else if (isAuthenticated().user.role === 'admin') {
+                    this.setState({
+                        redirectToProfile: true
+                    })
+                }
                 else updateUser(data, () => {
                     this.setState({
                         redirectToProfile: true
@@ -95,7 +102,7 @@ class EditProfile extends Component {
         }
     }
 
-    editForm = (name, email, password, about) => {
+    editForm = (name, email, password, about, role) => {
         return (
         <form>
             <div className='form-group'>
@@ -111,6 +118,11 @@ class EditProfile extends Component {
             <div className='form-group'>
                 <label className='text-muted'>Email</label>
                 <input onChange={this.handleChange('email')} type='email' className='form-control' value={email} />
+            </div>
+
+            <div className='form-group'>
+                <label className='text-muted'>Role</label>
+                <input onChange={this.handleChange('role')} type='text' className='form-control' value={role} />
             </div>
 
             <div className='form-group'>

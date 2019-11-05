@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { singlePost, update } from './apiPost';
 import { isAuthenticated } from "../auth";
-import { Redirect, Link } from "react-router-dom";
+import { Redirect} from "react-router-dom";
 import {Container, 
     Body,
     Content,
@@ -39,20 +39,9 @@ class EditPost extends Component {
         this.init(postId)
     }
 
-    showFile = async (e) => {
-        e.preventDefault()
-        const reader = new FileReader()
-        reader.onload = async (e) => { 
-          const text = (e.target.result)
-          console.log(text)
-          alert(text)
-        };
-        reader.readAsText(e.target.files[0])
-      }
-
     isValid = () => {
         const { title, body, fileSize } = this.state;
-        if (fileSize > 1000000) {
+        if (fileSize > 10000000) {
             this.setState({
                 error: "File size to large",
                 loading: false
@@ -105,7 +94,7 @@ class EditPost extends Component {
                 <input
                     onChange={this.handleChange("photo")}
                     type="file"
-                    accept="txt/*"
+                    accept=".xlsx, .xls, image/*, .doc, .docx,.ppt, .pptx, .txt, .pdf" 
                     className="form-control"
                 />
             </div>

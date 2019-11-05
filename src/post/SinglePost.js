@@ -102,7 +102,7 @@ class SinglePost extends Component {
         : DefaultPost;
 
         return (
-                <div className="column mt-5" >
+                <div  className='container'>
                     <p className="font-italic mark">
                         Posted by{" "}
                         <Link to={`${posterId}`}>
@@ -129,6 +129,7 @@ class SinglePost extends Component {
                             style={{height: '500px', width: '500px', objectFit: 'cover'}}
                         />
                    </div>
+                   
                     
                     {like ? (
                         <h3 onClick={this.likeToggle}>
@@ -161,6 +162,29 @@ class SinglePost extends Component {
                         </>
                         
                         }
+
+                        {isAuthenticated().user && isAuthenticated().user.role === 'admin' && (
+                            <div className='card mt-5'>
+                                <div className='card-body'>
+                                    <h5 className='card-title'>Admin</h5>
+                                    <p className='mb-2 text-danger'>
+                                        Edit/Delete as an Admin
+                                    </p>
+                                    <Link
+                                        to={`/post/edit/${post._id}`}
+                                        className='btn btn-raised btn-warning'
+                                    >
+                                        Update Post
+                                    </Link>
+                                    <button
+                                        onClick={this.deleteConfirm}
+                                        className='btn btn-raised btn-danger ml-5'
+                                    >
+                                        Delete Post
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
         );
@@ -180,9 +204,9 @@ class SinglePost extends Component {
                <Container>
                    <Body>
                        <Content>
-                           <div className='text-center'>
+                           <div className='singlePost'>
                                 {!post ? ( 
-                                        <div className='jumbotron text-center'>
+                                        <div className='jumbotron text-center '>
                                             <h2>Loading....</h2>
                                         </div>
                                         ) : (

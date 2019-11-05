@@ -1,7 +1,10 @@
 Aside {
-  border: solid black;
   position: fixed;
   z-index: 10;
+}
+
+Aside > a{
+ color: black;
 }
 
 span {
@@ -61,16 +64,23 @@ span {
   }
 
  .aside a {
-    color: white;
+    color:black;
     padding-bottom: 50px;
     margin-bottom: 10px;
   }
 
   #post {
     display: flex;
-    align-items: justify-centent;
-    margin-left: 300px;
-    width: 700px;
+    flex-direction: column;
+    justify-content: space-around;
+    align-content: space-around;
+  }
+
+  #users {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-content: space-around;
   }
 
 .commentDate{
@@ -82,7 +92,19 @@ span {
   cursor: pointer;
 }
 
+.singlePost {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+
 #comments nav{
   display: flex;
   flex-direction: row;
+}
+
+#authForm {
+  margin-top: 100px;
 }

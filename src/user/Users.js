@@ -30,14 +30,14 @@ class Users extends React.Component {
     }
 
     renderUsers = (users) => (
-        <div id='users' className='row container'>
+        <div id='users' className='row container '>
             {users.map((user, i) => (
-                <div className="card col-md-4" key={i}>
-                <img style={{height: '200px', width: 'auto'}} className='img-thumbnail' src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`} onError={i => (i.target.src = `${DefaultProfile}`)} alt={user.name} />
+                <div className="card col-md-6 mt-5" key={i}>
+                <img style={{height: '200px', width: 'auto', marginTop: '10px'}} className='img-thumbnail' src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`} onError={i => (i.target.src = `${DefaultProfile}`)} alt={user.name} />
                 <div className="card-body">
                   <h5 className="card-title">{user.name}</h5>
                   <p className="card-text">
-                      {user.email}
+                      {user.role}
                   </p>
                   <Link to={`/user/${user._id}`} className="btn btn-raised btn-primary btn-small">View Profile</Link>
                 </div>
@@ -56,8 +56,8 @@ class Users extends React.Component {
 
                    </Header>
                    <Body>
-                       <Content style={{'width': '300px', 'margin-top': '10px'}}>
-                        <h2 className='mt-5 mb-5'>Users</h2> 
+                       <Content >
+                       
                             {this.renderUsers(users)}
                        </Content>
                        

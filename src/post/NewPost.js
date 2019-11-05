@@ -31,7 +31,7 @@ class NewPost extends Component {
 
     isValid = () => {
         const { title, body, fileSize } = this.state;
-        if (fileSize > 100000) {
+        if (fileSize > 1000000) {
             this.setState({
                 error: "File size should be less than 100kb",
                 loading: false
@@ -84,7 +84,7 @@ class NewPost extends Component {
                 <input
                     onChange={this.handleChange("photo")}
                     type="file"
-                    accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf" 
+                    accept=".xlsx, .xls, image/*, .doc, .docx,.ppt, .pptx, .txt, .pdf" 
                     className="form-control"
                 />
             </div>

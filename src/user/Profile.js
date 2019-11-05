@@ -132,6 +132,7 @@ class Profile extends Component {
                 <div className="lead mt-2">
                   <p>Hello {user.name}</p>
                   <p>Email: {user.email}</p>
+                  <p>Role: {user.role} </p>
                   <p>{`Member since ${new Date(user.created).toDateString()}`}</p>
                 </div>
 
@@ -182,7 +183,7 @@ class Profile extends Component {
                 <div>
                   {isAuthenticated().user &&
                     isAuthenticated().user.role === "admin" && (
-                      <div class="card mt-5">
+                      <div class="card mt-5 mr-5">
                         <div className="card-body">
                           <h5 className="card-title">Admin</h5>
                           <p className="mb-2 text-danger">
@@ -194,8 +195,8 @@ class Profile extends Component {
                           >
                             Edit Profile
                           </Link>
-                          {/*<DeleteUser userId={user._id} />*/}
-                          <DeleteUser />
+                          <DeleteUser userId={user._id} />
+                          {/* <DeleteUser /> */}
                         </div>
                       </div>
                     )}
