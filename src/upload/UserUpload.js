@@ -14,7 +14,8 @@ class UserUpload extends Component {
         super();
         this.state = {
             user: {},
-            uploads: []
+            uploads: [],
+            url: ''
         };
        
     }
@@ -54,7 +55,7 @@ class UserUpload extends Component {
       
 
     render() {
-        const { user, uploads } = this.state;
+        const { user, uploads, url } = this.state;
        
         return (
             <div>
@@ -81,12 +82,17 @@ class UserUpload extends Component {
                       <hr />
                       <div id='title'>
                         {uploads.reverse().map((upload, i) => (
+                        
                             <div key={i}>
                               
                                 <div className='column'>
-                                    <Link to={`/upload/${upload._id}`}>
+                                    <Link to={url}>
                                       <p className="lead">{upload.title}:  {upload.body}</p>
+                                      
                                     </Link>
+                                    <a id='news' style={{color: 'black'}} onClick={() => {
+                                                window.open(upload.url, '_blank')
+                                            }} >{upload.title}:  {upload.body}</a>
                                 </div>
                             </div>
                         ))}

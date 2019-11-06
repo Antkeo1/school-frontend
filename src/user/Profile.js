@@ -101,6 +101,7 @@ class Profile extends Component {
 
   render() {
     const { redirectToSignin, user, posts, uploads } = this.state;
+    console.log(user)
     if (redirectToSignin) return <Redirect to="/signin" />;
 
     const photoUrl = user._id

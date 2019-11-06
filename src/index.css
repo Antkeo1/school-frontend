@@ -17,7 +17,7 @@ span {
     margin-bottom: 1rem;
     background: blue;
     position: fixed;
-    width: 1450px;
+    width: 100%;
     z-index: 10;
   }
   
@@ -92,7 +92,7 @@ span {
   cursor: pointer;
 }
 
-.singlePost {
+#singlePost {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

@@ -16,6 +16,7 @@ class NewUpload extends Component {
         this.state = {
             title: "",
             body: '',
+            url: '',
             photo: "",
             error: "",
             user: {},
@@ -33,7 +34,7 @@ class NewUpload extends Component {
     }
 
     isValid = () => {
-        const { title, body, fileSize } = this.state;
+        const { title, url, fileSize } = this.state;
         if (fileSize > 100000) {
             this.setState({
                 error: "File size should be less than 100kb",
@@ -41,7 +42,7 @@ class NewUpload extends Component {
             });
             return false;
         }
-        if (title.length === 0 || body.length === 0) {
+        if (title.length === 0 || url.length === 0) {
             this.setState({ error: "All fields are required", loading: false });
             return false;
         }
@@ -73,6 +74,7 @@ class NewUpload extends Component {
                         loading: false,
                         title: "",
                         body: "",
+                        url:"",
                         redirectToUpload: true
                     });
                 }
@@ -80,7 +82,7 @@ class NewUpload extends Component {
         }
     };
 
-    newPostForm = (title, body) => (
+    newPostForm = (title, url) => (
         <form>
             <div className="form-group">
                 <label className="text-muted"></label>
@@ -91,6 +93,17 @@ class NewUpload extends Component {
                     className="form-control"
                 />
             </div>
+
+            <div className="form-group">
+                <label className="text-muted">Url of Document</label>
+                <input
+                    onChange={this.handleChange("url")}
+                    type="text"
+                    className="form-control"
+                    value={url}
+                />
+            </div>
+
             <div className="form-group">
                 <label className="text-muted">Title of file</label>
                 <input
@@ -101,16 +114,9 @@ class NewUpload extends Component {
                 />
             </div>
 
-            <div className="form-group">
-                <label className="text-muted">Description of file</label>
-                <textarea
-                    onChange={this.handleChange("body")}
-                    type="text"
-                    className="form-control"
-                    value={body}
-                />
+            
                 
-            </div>
+            
 
             <div className='row'>
                 <button
@@ -129,6 +135,7 @@ class NewUpload extends Component {
         const {
             title,
             body,
+            url,
             error,
             loading,
             redirectToUpload
@@ -159,7 +166,7 @@ class NewUpload extends Component {
                         )} 
         
 
-                        {this.newPostForm(title, body)}
+                        {this.newPostForm(title, url)}
                         </Content>
 
                         

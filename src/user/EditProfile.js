@@ -119,11 +119,16 @@ class EditProfile extends Component {
                 <label className='text-muted'>Email</label>
                 <input onChange={this.handleChange('email')} type='email' className='form-control' value={email} />
             </div>
+            {isAuthenticated() && isAuthenticated().user.role === 'admin' && (
+                         <div className='form-group'>
+                            <label className='text-muted'>Role</label>
+                            <input onChange={this.handleChange('role')} type='text' className='form-control' value={role} />
+                        </div>
+                           
+                           )
+                       }
 
-            <div className='form-group'>
-                <label className='text-muted'>Role</label>
-                <input onChange={this.handleChange('role')} type='text' className='form-control' value={role} />
-            </div>
+           
 
             <div className='form-group'>
                 <label className='text-muted'>About</label>

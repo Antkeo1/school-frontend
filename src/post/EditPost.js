@@ -4,8 +4,7 @@ import { isAuthenticated } from "../auth";
 import { Redirect} from "react-router-dom";
 import {Container, 
     Body,
-    Content,
-    Aside,
+    Content
   } from 'react-holy-grail-layout'
 
 
@@ -132,7 +131,7 @@ class EditPost extends Component {
         const {id, title, body, redirectToProfile, error, loading} = this.state
 
         if (redirectToProfile) {
-            return <Redirect to={`/user/${isAuthenticated().user._id}`} />;
+            return <Redirect to={`/post/${id}`} />;
         }
 
         return (

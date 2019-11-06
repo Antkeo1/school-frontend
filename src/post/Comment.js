@@ -94,10 +94,6 @@ class Comment extends React.Component {
                 <Container>
                     <Body>
                         <Content >
-                            <h2 className='mt-5 mb-5'>
-                                Leave a comment
-                            </h2>
-
                             <form className='container' onSubmit={this.addComment}>
                                 <div className='form-group row'>
                                     <textarea style={{ width: "950px" }} type='text' placeholder='Leave a comment' value={this.state.text} onChange={this.handleChange} className='form-control'/>

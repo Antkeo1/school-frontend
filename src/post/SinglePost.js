@@ -143,7 +143,7 @@ class SinglePost extends Component {
                     </h3>
                     )}
 
-                    <div className='d-inline-block'>
+                    <div className='d-inline-block mb-5'>
                         <Link
                             to={`/`}
                             className="btn btn-raised btn-primary btn-sm"
@@ -204,7 +204,7 @@ class SinglePost extends Component {
                <Container>
                    <Body>
                        <Content>
-                           <div className='singlePost'>
+                           <div id='singlePost' className='text-center'>
                                 {!post ? ( 
                                         <div className='jumbotron text-center '>
                                             <h2>Loading....</h2>

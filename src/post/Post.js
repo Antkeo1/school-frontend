@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { list, like , unlike} from "./apiPost";
+import { list, read, like , unlike} from "./apiPost";
 import DefaultPost from "../images/person.png";
 import { Link } from "react-router-dom";
 import {isAuthenticated} from '../auth'
@@ -10,12 +10,22 @@ class Posts extends Component {
     constructor() {
         super();
         this.state = {
+            user: '',
             posts: [],
             page: 1,
             like: false,
             likes: 0
         };
     }
+
+    checkFollow = user => {
+        const jwt = isAuthenticated();
+        const match = user.followers.find(follower => {
+          // one id has many other ids (followers) and vice versa
+          return follower._id === jwt.user._id;
+        });
+        return match;
+      };
 
     loadPosts = page => {
         list(page).then(data => {
@@ -29,6 +39,19 @@ class Posts extends Component {
         });
     };
 
+    init = userId => {
+        const token = isAuthenticated().token;
+        read(userId, token).then(data => {
+          if (data.error) {
+            this.setState({ redirectToSignin: true });
+          } else {
+            let following = this.checkFollow(data);
+            this.setState({ user: data, following });
+            this.loadPosts(data._id);
+          }
+        });
+      };
+
     checkLike = (likes) => {
         const userId = isAuthenticated().user._id
         let match = likes.indexOf(userId) !== -1
@@ -36,7 +59,10 @@ class Posts extends Component {
     }
 
     componentDidMount() {
+        const userId = isAuthenticated().user._id;
+        this.init(userId);
         this.loadPosts(this.state.posts)
+        
     }
 
     likeToggle = () => {
@@ -68,6 +94,7 @@ class Posts extends Component {
     };
 
     renderPosts = posts => {
+
         return (
             <div  id='post' className='row container'>
                 {posts.map((post, i) => {
@@ -139,8 +166,9 @@ class Posts extends Component {
     };
 
     render() {
-        const { posts } = this.state;
-       
+        const { user, posts } = this.state;
+       console.log(posts)
+       console.log(user)
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">
@@ -148,6 +176,7 @@ class Posts extends Component {
                 </h2>
                 <Content  >
                     {this.renderPosts(posts)}
+                    
                 </Content>
                 
             </div>
