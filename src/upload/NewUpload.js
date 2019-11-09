@@ -34,7 +34,7 @@ class NewUpload extends Component {
     }
 
     isValid = () => {
-        const { title, url, fileSize } = this.state;
+        const { title, url, body, fileSize } = this.state;
         if (fileSize > 100000) {
             this.setState({
                 error: "File size should be less than 100kb",
@@ -42,7 +42,7 @@ class NewUpload extends Component {
             });
             return false;
         }
-        if (title.length === 0 || url.length === 0) {
+        if (title.length === 0 || url.length === 0 || body.length === 0) {
             this.setState({ error: "All fields are required", loading: false });
             return false;
         }
@@ -82,7 +82,7 @@ class NewUpload extends Component {
         }
     };
 
-    newPostForm = (title, url) => (
+    newPostForm = (title, url, body) => (
         <form>
             <div className="form-group">
                 <label className="text-muted"></label>
@@ -91,6 +91,26 @@ class NewUpload extends Component {
                     type="file"
                     accept=".xlsx,.xls,image/*,.doc, .zip, .docx,.ppt, .pptx,.txt,.pdf, .html, .rtf" 
                     className="form-control"
+                />
+            </div>        
+
+            <div className="form-group">
+                <label className="text-muted">Title of Document</label>
+                <input
+                    onChange={this.handleChange("title")}
+                    type="text"
+                    className="form-control"
+                    value={title}
+                />
+            </div>
+
+            <div className="form-group">
+                <label className="text-muted">Description of Document</label>
+                <input
+                    onChange={this.handleChange("body")}
+                    type="text"
+                    className="form-control"
+                    value={body}
                 />
             </div>
 
@@ -102,21 +122,7 @@ class NewUpload extends Component {
                     className="form-control"
                     value={url}
                 />
-            </div>
-
-            <div className="form-group">
-                <label className="text-muted">Title of file</label>
-                <input
-                    onChange={this.handleChange("title")}
-                    type="text"
-                    className="form-control"
-                    value={title}
-                />
-            </div>
-
-            
-                
-            
+            </div>                                 
 
             <div className='row'>
                 <button
@@ -166,7 +172,7 @@ class NewUpload extends Component {
                         )} 
         
 
-                        {this.newPostForm(title, url)}
+                        {this.newPostForm(title, url, body)}
                         </Content>
 
                         

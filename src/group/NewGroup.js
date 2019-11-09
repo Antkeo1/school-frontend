@@ -1,42 +1,42 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../auth";
-import { create } from "./apiPost";
+import { create } from "./apiGroup";
 import { Redirect } from "react-router-dom";
 import {Container, 
     Body,
     Content
 } from 'react-holy-grail-layout'
 
-class NewPost extends Component {
+class NewGroup extends Component {
     constructor() {
         super();
         this.state = {
-            title: "",
-            body: "",
+            name: "",
+            mission: "",
             photo: "",
             error: "",
             user: {},
             fileSize: 0,
             loading: false,
-            redirectToProfile: false
+            redirectToCreator: false
         };
     }
 
     componentDidMount() {
-        this.postData = new FormData();
+        this.groupData = new FormData();
         this.setState({ user: isAuthenticated().user });
     }
 
     isValid = () => {
-        const { title, body, fileSize } = this.state;
-        if (fileSize > 1000000) {
-            this.setState({
-                error: "File size should be less than 100kb",
-                loading: false
-            });
-            return false;
-        }
-        if (title.length === 0 || body.length === 0) {
+        const { name, mission, fileSize } = this.state;
+        // if (fileSize > 1000000) {
+        //     this.setState({
+        //         error: "File size should be less than 100kb",
+        //         loading: false
+        //     });
+        //     return false;
+        // }
+        if (name.length === 0 || mission.length === 0) {
             this.setState({ error: "All fields are required", loading: false });
             return false;
         }
@@ -49,7 +49,7 @@ class NewPost extends Component {
             name === "photo" ? event.target.files[0] : event.target.value;
 
         const fileSize = name === "photo" ? event.target.files[0].size : 0;
-        this.postData.set(name, value);
+        this.groupData.set(name, value);
         this.setState({ [name]: value, fileSize });
     };
 
@@ -61,24 +61,24 @@ class NewPost extends Component {
             const userId = isAuthenticated().user._id;
             const token = isAuthenticated().token;
 
-            create(userId, token, this.postData).then(data => {
+            create(userId, token, this.groupData).then(data => {
                 if (data.error) this.setState({ error: data.error });
                 else {
                     this.setState({
                         loading: false,
-                        title: "",
-                        body: "",
-                        redirectToProfile: true
+                        name: "",
+                        mission: "",
+                        redirectToCreator: true
                     });
                 }
             });
         }
     };
 
-    newPostForm = (title, body) => (
+    newGroupForm = (name, mission) => (
         <form>
             <div className="form-group">
-                <label className="text-muted">Post Photo</label>
+                <label className="text-muted">Group Logo</label>
                 <input
                     onChange={this.handleChange("photo")}
                     type="file"
@@ -87,22 +87,22 @@ class NewPost extends Component {
                 />
             </div>
             <div className="form-group">
-                <label className="text-muted">Title</label>
+                <label className="text-muted">Name of group</label>
                 <input
-                    onChange={this.handleChange("title")}
+                    onChange={this.handleChange("name")}
                     type="text"
                     className="form-control"
-                    value={title}
+                    value={name}
                 />
             </div>
 
             <div className="form-group">
-                <label className="text-muted">Body</label>
+                <label className="text-muted">Mission Statement</label>
                 <textarea
-                    onChange={this.handleChange("body")}
+                    onChange={this.handleChange("mission")}
                     type="text"
                     className="form-control"
-                    value={body}
+                    value={mission}
                 />
             </div>
 
@@ -110,22 +110,22 @@ class NewPost extends Component {
                 onClick={this.clickSubmit}
                 className="btn btn-raised btn-primary"
             >
-                Create Post
+                Create Group
             </button>
         </form>
     );
 
     render() {
         const {
-            title,
-            body,
+            name,
+            mission,
             user,
             error,
             loading,
-            redirectToProfile
+            redirectToCreator
         } = this.state;
 
-        if (redirectToProfile) {
+        if (redirectToCreator) {
             return <Redirect to={`/user/${user._id}`} />;
         }
 
@@ -134,7 +134,7 @@ class NewPost extends Component {
                 <Container>
                     <Body>
                         <Content style={{'margin': '10px 0 0 10px'}}>
-                            <h2 className="mt-5 mb-5">Create a new post</h2>
+                            <h2 className="mt-5 mb-5">Create a Group page</h2>
                             <div
                                 className="alert alert-danger"
                                 style={{ display: error ? "" : "none" }}
@@ -151,7 +151,7 @@ class NewPost extends Component {
                             )} 
             
 
-                            {this.newPostForm(title, body)}
+                            {this.newGroupForm(name, mission)}
                         </Content>
 
                        
@@ -164,4 +164,4 @@ class NewPost extends Component {
     }
 }
 
-export default NewPost;
+export default NewGroup;

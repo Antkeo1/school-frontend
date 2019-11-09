@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { singleUpload, update } from './apiUpload';
+import { singleUpload, update, remove } from './apiUpload';
 import { isAuthenticated } from "../auth";
 import { Redirect, Link } from "react-router-dom";
 import {Container, 
@@ -16,7 +16,9 @@ class EditUpload extends Component {
             id: '',
             title: '',
             body: '',
+            url: '',
             redirectToUploads: false,
+            redirectToFiles: false,
             error: '',
             filesize: 0,
             loading: false
@@ -28,7 +30,7 @@ class EditUpload extends Component {
             if (data.error) {
                 this.setState({redirectToProfile: true})
             } else {
-                this.setState({id: data._id, title: data.title, body: data.body, error: ''})
+                this.setState({id: data._id, title: data.title, url: data.url, error: ''})
             }
         })
     }
@@ -40,7 +42,7 @@ class EditUpload extends Component {
     }
 
     isValid = () => {
-        const { title, body, fileSize } = this.state;
+        const { title, url, fileSize } = this.state;
         if (fileSize > 1000000) {
             this.setState({
                 error: "File size to large",
@@ -48,7 +50,7 @@ class EditUpload extends Component {
             });
             return false;
         }
-        if (title.length === 0 || body.length === 0) {
+        if (title.length === 0 || url.length === 0) {
             this.setState({ error: "All fields are required", loading: false });
             return false;
         }
@@ -79,7 +81,7 @@ class EditUpload extends Component {
                     this.setState({
                         loading: false,
                         title: "",
-                        body: "",
+                        url: "",
                         redirectToUploads: true
                     });
                 }
@@ -87,7 +89,27 @@ class EditUpload extends Component {
         }
     };
 
-    editPostForm = (title, body) => (
+    deleteUpload = () => {
+        const uploadId = this.state.id
+        const token = isAuthenticated().token
+        remove(uploadId, token, this.uploadData).then(data => {
+            if(data.error) {
+                this.setState({ error: data.error })
+            } else {
+                this.setState({redirectToFiles: true})
+                console.log('hello')
+            }
+        })
+    }
+
+    deleteConfirm = () => {
+        let answer = window.confirm('Are you sure you want to delete your upload?')
+        if(answer) {
+            this.deleteUpload()
+        }
+    }
+
+    editPostForm = (title, url, body) => (
         <form>
             <div className="form-group">
                 <input
@@ -108,12 +130,22 @@ class EditUpload extends Component {
             </div>
 
             <div className="form-group">
-                <label className="text-muted">Body</label>
-                <textarea
+                <label className="text-muted">Description of Document</label>
+                <input
                     onChange={this.handleChange("body")}
                     type="text"
                     className="form-control"
                     value={body}
+                />
+            </div>
+
+            <div className="form-group">
+                <label className="text-muted">Url of Document</label>
+                <input
+                    onChange={this.handleChange("url")}
+                    type="text"
+                    className="form-control"
+                    value={url}
                 />
             </div>
 
@@ -123,12 +155,15 @@ class EditUpload extends Component {
             >
                 Edit File
             </button>
+            <button onClick={this.deleteConfirm} className='btn btn-raised btn-warning btn-sm ml-5'>
+                Delete Upload
+            </button>
         </form>
     );
 
 
     render() {
-        const {id, title, body, redirectToUploads, error, loading} = this.state
+        const {id, title, url, body, redirectToUploads, error, loading} = this.state
 
         if (redirectToUploads) {
             return <Redirect to={`/uploads/by/${isAuthenticated().user._id}`} />;
@@ -154,7 +189,7 @@ class EditUpload extends Component {
                         <img style={{height: '200px', width: 'auto'}} className='img-thumbnail' src={`${process.env.REACT_APP_API_URL}/post/photo/${id}`} onError={i => (i.target.src = ``)} alt='' />
 
 
-                        {this.editPostForm(title, body)}
+                        {this.editPostForm(title, url, body)}
                     </Content>
 
                    

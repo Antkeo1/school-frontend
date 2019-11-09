@@ -89,12 +89,7 @@ class SingleUpload extends Component {
         if(answer) {
             this.deleteUpload()
         }
-    }
-
-    onError = e => {
-        console.logError(e, 'error in file viewer')
-    }
-    
+    } 
 
     renderUpload = (upload) => {
         const uploaderId = upload.uploadedBy
@@ -134,10 +129,13 @@ class SingleUpload extends Component {
                     <br />
                     
                     
-                    <p className="card-text">
-                        {upload.body}
-                    </p>
-                    <img
+                    <div className="card-text column">
+                        <h2> <div>{upload.title}</div></h2>
+                        <a id='news' style={{color: 'black'}} onClick={() => {
+                                                window.open(upload.url, '_blank')
+                                            }} >{upload.url}</a>
+                    </div>
+                    {/* <img
                         src={`${
                             process.env.REACT_APP_API_URL
                         }/upload/photo/${upload._id}`}
@@ -147,11 +145,11 @@ class SingleUpload extends Component {
                         }
                         className="img-thunbnail mb-3 ml-50"
                         style={{height: 'auto', width: '100%', objectFit: 'cover'}}
-                    />
+                    /> */}
                     
-                    <div className='container'> 
+                    {/* <div className='container'> 
                         <iframe src={fileUrl} title='file' style={{height: '100vh', width: '100%'}}></iframe>
-                    </div>
+                    </div> */}
                    
                     {like ? (
                         <h3 onClick={this.likeToggle}>
@@ -164,23 +162,7 @@ class SingleUpload extends Component {
                         {likes} unlike
                     </h3>
                     )}
-                    
-                    {/* <div>
-                    <Document file={{url: fileUrl}} onDocumentLoadSuccess={this.onDocumentLoadSuccess}> 
-                        <Page size='A4' pageNumber={this.state.pageNumber} />
-                    </Document>
-                    <p>Page {this.state.pageNumber} of {this.state.numPages}</p> 
-                    
-                    <object data={fileUrl} type='application/pdf'>
-                        <iframe src={fileUrl}></iframe>
-                    </object>
-                    
-                    <FileViewer
-                        fileType={type}
-                        filePath={fileUrl}
-                    />
-
-                    </div> */}
+                  
                     <div className='d-inline-block'>
                         <Link
                             to={`/uploads/by/${

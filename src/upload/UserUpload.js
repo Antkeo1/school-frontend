@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { uploadByUser, read } from "./apiUpload";
+import { uploadByUser, read, remove  } from "./apiUpload";
 import { Link } from "react-router-dom";
 import { isAuthenticated } from "../auth";
 import {Container, 
@@ -46,6 +46,7 @@ class UserUpload extends Component {
       componentDidMount() {
         const userId = this.props.match.params.userId;
         this.init(userId);
+        
       }
     
       componentWillReceiveProps(props) {
@@ -53,10 +54,28 @@ class UserUpload extends Component {
         this.init(userId);
       }
       
+      deleteUpload = () => {
+        const uploadId = this.state.uploads._id
+        const token = isAuthenticated().token
+        remove(uploadId, token).then(data => {
+            if(data.error) {
+                console.log(data.error)
+            } else {
+                this.setState({redirectToUpload: true})
+            }
+        })
+    }
+
+    deleteConfirm = () => {
+        let answer = window.confirm('Are you sure you want to delete your upload?')
+        if(answer) {
+            this.deleteUpload()
+        }
+    }
 
     render() {
         const { user, uploads, url } = this.state;
-       
+        
         return (
             <div>
               <Container>
@@ -86,13 +105,13 @@ class UserUpload extends Component {
                             <div key={i}>
                               
                                 <div className='column'>
-                                    <Link to={url}>
-                                      <p className="lead">{upload.title}:  {upload.body}</p>
-                                      
-                                    </Link>
+                                
                                     <a id='news' style={{color: 'black'}} onClick={() => {
                                                 window.open(upload.url, '_blank')
                                             }} >{upload.title}:  {upload.body}</a>
+                                           <Link to={`/upload/${upload._id}`} className='btn btn-raised btn-warning ml-4 btn-sm mr-4'>
+                                              View
+                                          </Link> 
                                 </div>
                             </div>
                         ))}
