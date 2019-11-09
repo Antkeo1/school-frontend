@@ -17,7 +17,7 @@ class SingleGroup extends Component {
         redirectToSignIn: false,
         like: false,
         likes: 0,
-        posts: []
+        // posts: []
     }
 
     // checkLike = (likes) => {
@@ -174,7 +174,7 @@ class SingleGroup extends Component {
                                         Edit/Delete as an Admin
                                     </p>
                                     <Link
-                                        to={`/group/edit/${group._id}`}
+                                        exact to={`/group/edit/${group._id}`}
                                         className='btn btn-raised btn-warning'
                                     >
                                         Update Group info

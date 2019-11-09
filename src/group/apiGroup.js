@@ -62,3 +62,18 @@ export const read = (userId, token) => {
         })
         .catch(err => console.log(err));
 };
+
+export const update = (groupId, token, group) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/group/${groupId}`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: group
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};

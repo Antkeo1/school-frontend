@@ -17,6 +17,9 @@ const Menu = ({history}) => {
                     <li className="nav-item">
                         <Link className='nav-link' style={isActive(history, '/')} to='/'>Home</Link>
                     </li>
+                    <li className="nav-item">
+                        <Link className='nav-link' style={isActive(history, '/group/create')} to='/group/create'>Create Group</Link>
+                    </li>
                     {isAuthenticated() && isAuthenticated().user.role === 'admin' && (
                                 
                                      <li className="nav-item">

@@ -28,6 +28,7 @@ import EditPost from './post/EditPost'
 
 import NewGroup from './group/NewGroup'
 import SingleGroup from './group/SingleGroup'
+import EditGroup from './group/EditGroup'
 import Groups from './group/Groups'
 
 import Admin from './admin/Admin'
@@ -64,6 +65,7 @@ const MainRouter = () => {
                 <Route exact path='/uploads/by/:userId' component={UserUpload} />
 
                 <PrivateRoute exact path='/group/create' component={NewGroup} />
+                <PrivateRoute exact path='/group/edit/:groupId' component={EditGroup} />
                 <Route exact path='/group/:groupId' component={SingleGroup} />
                 <PrivateRoute exact path='/groups' component={Groups} />
             </Switch>

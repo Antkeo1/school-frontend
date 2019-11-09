@@ -80,6 +80,12 @@ class Side extends Component {
                                             </Link>
                                         </div>
 
+                                        <div >
+                                            <Link className='mb-5'  to={`/groups`}  >
+                                                Find Groups
+                                            </Link>
+                                        </div>
+
                                         {isAuthenticated() && isAuthenticated().user.role === 'admin' && (
                                             <div >
                                                 <div >
