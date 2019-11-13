@@ -96,6 +96,7 @@ export const joinGroup = (userId, token, groupId) => {
 };
 
 export const leaveGroup = (userId, token, groupId) => {
+    console.log(groupId)
     return fetch(`${process.env.REACT_APP_API_URL}/user/leavegroup`, {
         method: "PUT",
         headers: {

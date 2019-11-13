@@ -6,8 +6,7 @@ import DefaultPost from "../images/person.png";
 import Comment from './Comment'
 import {Container, 
     Body,
-    Content,
-    Aside,
+    Content
   } from 'react-holy-grail-layout'
 
 class SinglePost extends Component {

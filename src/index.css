@@ -100,6 +100,14 @@ span {
   margin-top: 100px;
 }
 
+#singleGroup {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+
 #comments nav{
   display: flex;
   flex-direction: row;

@@ -14,7 +14,6 @@ import {Container,
 
 class SingleGroup extends Component {
     state = {
-        user: {group: []},
         group: '',
         redirectToHome: false,
         redirectToSignIn: false,
@@ -26,13 +25,13 @@ class SingleGroup extends Component {
   checkMember = group => {
     const jwt = isAuthenticated();
     const match = group.members.find(member => {
-        
         // checking to see if any current of member of group matches the id of the current user
         // if no match, current user isnt a member of group
         // if there is a match, then current user is a member and can not join again
       return member._id === jwt.user._id;
     });
     return match;
+    
   };
 
   clickJoinButton = callApi => {
@@ -40,7 +39,6 @@ class SingleGroup extends Component {
     const token = isAuthenticated().token;
 
     callApi(userId, token, this.state.group._id).then(data => {
-        console.log(this.state.group)
         if (data.error) {
         this.setState({ error: data.error });
       } else {
@@ -56,22 +54,20 @@ class SingleGroup extends Component {
     //     return match;
     // }
 
-    componentDidMount = () => {
+    componentDidMount() {
         const groupId = this.props.match.params.groupId
         singleGroup(groupId).then(data => {
-            console.log(data)
             if (data.error) {
                 console.log(data.error)
             } else {
                 let member = this.checkMember(data);
-                this.setState({group: data, member})
-                console.log(this.state.member)
+                this.setState({group: data, member})           
             }
         }) 
     }
 
 
-  componentWillReceiveProps(props) {
+  UNSAFE_componentWillReceiveProps(props) {
     const groupId = this.props.match.params.groupId
         singleGroup(groupId).then(data => {
             if (data.error) {
@@ -111,7 +107,7 @@ class SingleGroup extends Component {
         ? group.createdBy.name
         : " Unknown";
 
-        const {like, likes} = this.state
+        // const {like, likes} = this.state
 
         const photoUrl = group.createdBy
         ? `${process.env.REACT_APP_API_URL}/user/photo/${
@@ -184,7 +180,7 @@ class SingleGroup extends Component {
                         
                         }
 
-                        {isAuthenticated().user && isAuthenticated().user.role === 'admin' && (
+                        {isAuthenticated().user && isAuthenticated().user.role == 'admin' && (
                             <div className='card mt-5'>
                                 <div className='card-body'>
                                     <h5 className='card-title'>Admin</h5>
@@ -192,7 +188,7 @@ class SingleGroup extends Component {
                                         Edit/Delete as an Admin
                                     </p>
                                     <Link
-                                        exact to={`/group/edit/${group._id}`}
+                                         to={`/group/edit/${group._id}`}
                                         className='btn btn-raised btn-warning'
                                     >
                                         Update Group info
@@ -212,8 +208,8 @@ class SingleGroup extends Component {
     }
 
     render() {
-        const {group, mission, comments, redirectToHome, redirectToSignIn} = this.state
-        // console.log(group)
+        const {group, mission, comments, member, redirectToHome, redirectToSignIn} = this.state
+         console.log(member)
         if(redirectToHome) {
             return <Redirect to={`/`} />
          } else if(redirectToSignIn) {
@@ -225,7 +221,7 @@ class SingleGroup extends Component {
                <Container>
                    <Body>
                        <Content>
-                           <div id='singlePost' className='text-center'>
+                           <div id='singleGroup' className='text-center'>
                                 {!group ? ( 
                                         <div className='jumbotron text-center '>
                                             <h2>Loading....</h2>
