@@ -48,8 +48,8 @@ export const list = () => {
         .catch(err => console.log(err));
 };
 
-export const read = (userId, token) => {
-    return fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
+export const read = (groupId, token) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/group/${groupId}`, {
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -71,6 +71,39 @@ export const update = (groupId, token, group) => {
             Authorization: `Bearer ${token}`
         },
         body: group
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+
+export const joinGroup = (userId, token, groupId) => {
+    console.log(groupId)
+    return fetch(`${process.env.REACT_APP_API_URL}/user/joingroup`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ userId, groupId })
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+
+export const leaveGroup = (userId, token, groupId) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/leavegroup`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ userId, groupId })
     })
         .then(response => {
             return response.json();

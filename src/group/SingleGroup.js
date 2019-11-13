@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
-import {singleGroup, remove} from './apiGroup'
+import {singleGroup, remove, read} from './apiGroup'
 import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
+import JoinGroupButton from './JoinGroupButton'
 import DefaultPost from "../images/person.png";
 // import Comment from './Comment'
 import {Container, 
@@ -10,15 +11,44 @@ import {Container,
     Aside,
   } from 'react-holy-grail-layout'
 
+
 class SingleGroup extends Component {
     state = {
+        user: {group: []},
         group: '',
         redirectToHome: false,
         redirectToSignIn: false,
-        like: false,
-        likes: 0,
+        member: false
         // posts: []
     }
+
+    // check follow
+  checkMember = group => {
+    const jwt = isAuthenticated();
+    const match = group.members.find(member => {
+        
+        // checking to see if any current of member of group matches the id of the current user
+        // if no match, current user isnt a member of group
+        // if there is a match, then current user is a member and can not join again
+      return member._id === jwt.user._id;
+    });
+    return match;
+  };
+
+  clickJoinButton = callApi => {
+    const userId = isAuthenticated().user._id;
+    const token = isAuthenticated().token;
+
+    callApi(userId, token, this.state.group._id).then(data => {
+        console.log(this.state.group)
+        if (data.error) {
+        this.setState({ error: data.error });
+      } else {
+        this.setState({ group: data, member: !this.state.member });
+      }
+    });
+  };
+
 
     // checkLike = (likes) => {
     //     const userId = isAuthenticated() && isAuthenticated().user._id
@@ -27,46 +57,31 @@ class SingleGroup extends Component {
     // }
 
     componentDidMount = () => {
-        console.log(this.props)
         const groupId = this.props.match.params.groupId
         singleGroup(groupId).then(data => {
             console.log(data)
             if (data.error) {
                 console.log(data.error)
             } else {
-                this.setState({group: data})
-                
+                let member = this.checkMember(data);
+                this.setState({group: data, member})
+                console.log(this.state.member)
             }
         }) 
     }
 
-    // updateComments = comments => {
-    //     this.setState({comments})
-    // }
 
-    // likeToggle = () => {
-    //     if(!isAuthenticated()) {
-    //         this.setState({
-    //             redirectToSignIn: true
-    //         })
-    //         return false
-    //     }
-    //     let callApi = this.state.like ? unlike : like
-    //     const userId = isAuthenticated().user._id
-    //     const postId = this.state.post._id
-    //     const token = isAuthenticated().token
-        
-    //     callApi(userId, token, postId).then(data => {
-    //         if(data.error) {
-    //             console.log(data.error)
-    //         } else {
-    //             this.setState({
-    //                 like: !this.state.like,
-    //                 likes: data.likes.length
-    //             })
-    //         }
-    //     })
-    // }
+  componentWillReceiveProps(props) {
+    const groupId = this.props.match.params.groupId
+        singleGroup(groupId).then(data => {
+            if (data.error) {
+                console.log(data.error)
+            } else {
+                let member = this.checkMember(data);
+                this.setState({group: data, member})
+            }
+        }) 
+  }
 
     deleteGroup = () => {
         const groupId = this.props.match.params.postId
@@ -134,7 +149,7 @@ class SingleGroup extends Component {
                    </div> */}
                    
                     
-                    {like ? (
+                    {/* {like ? (
                         <h3 onClick={this.likeToggle}>
                            <i className='fa fa-thumbs-up text-primary bg-dark' style={{padding: '10px', borderRadius: '50%'}}/>{' '}
                         {likes} likes
@@ -144,7 +159,7 @@ class SingleGroup extends Component {
                             <i className='fa fa-thumbs-up text-warning bg-dark' style={{padding: '10px', borderRadius: '50%'}}/>{' '}
                         {likes} likes
                     </h3>
-                    )}
+                    )} */}
 
                     <div className='d-inline-block mb-5'>
                         <Link
@@ -153,8 +168,9 @@ class SingleGroup extends Component {
                         >
                             Back to groups
                         </Link>
+                        
                        {isAuthenticated().user && 
-                        isAuthenticated().user._id === group.createdBy._id &&  
+                        isAuthenticated().user._id === group.createdBy._id ? (
                         <>
                              <Link to={`/group/edit/${group._id}`} className='btn btn-raised btn-warning ml-4 btn-sm mr-4'>
                                 Update Group Info
@@ -162,7 +178,9 @@ class SingleGroup extends Component {
                             <button onClick={this.deleteConfirm} className='btn btn-raised btn-warning btn-sm'>
                                 Delete Group page
                             </button>
-                        </>
+                        </>) : (
+                            <JoinGroupButton member={this.state.member} onButtonClick={this.clickJoinButton}/>
+                        )
                         
                         }
 
@@ -195,7 +213,7 @@ class SingleGroup extends Component {
 
     render() {
         const {group, mission, comments, redirectToHome, redirectToSignIn} = this.state
-        console.log(group)
+        // console.log(group)
         if(redirectToHome) {
             return <Redirect to={`/`} />
          } else if(redirectToSignIn) {
