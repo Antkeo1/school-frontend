@@ -1,3 +1,5 @@
+import { isAuthenticated } from "../auth";
+
 export const create = (userId, token, post) => {
     return fetch(`${process.env.REACT_APP_API_URL}/post/new/${userId}`, {
         method: "POST",
@@ -29,7 +31,7 @@ export const read = (userId, token) => {
 };
 
 export const list = () => {
-    return fetch(`${process.env.REACT_APP_API_URL}/posts`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/posts/${isAuthenticated().user._id}`, {
         method: "GET"
     })
         .then(response => {

@@ -17,6 +17,7 @@ class Posts extends Component {
             likes: 0
         };
     }
+    
 
     checkFollow = user => {
         const jwt = isAuthenticated();
@@ -32,6 +33,7 @@ class Posts extends Component {
             if (data.error) {
                 console.log(data.error);
             } else {
+                //console.log(data)
                 this.setState({ posts: data });
                 
 
@@ -62,7 +64,6 @@ class Posts extends Component {
         const userId = isAuthenticated().user._id;
         this.init(userId);
         this.loadPosts(this.state.posts)
-        
     }
 
     likeToggle = () => {
@@ -98,7 +99,7 @@ class Posts extends Component {
         return (
             <div  id='post' className='row container'>
                 {posts.map((post, i) => {
-                    // console.log(post.postedBy.photo)
+                    // console.log(post.postedBy)
                     const posterId = post.postedBy
                         ? `/user/${post.postedBy._id}`
                         : "";
@@ -115,7 +116,7 @@ class Posts extends Component {
                         // const fileUrl = `${
                         //     process.env.REACT_APP_API_URL
                         // }/post/photo/${post._id}`
-
+                        
                     return (
                         <div  className="card col-md-6 mb-4" key={i}>
                             <div  >
@@ -167,14 +168,13 @@ class Posts extends Component {
 
     render() {
         const { user, posts } = this.state;
-       console.log(posts)
-       console.log(user)
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">
                     {!posts.length ? "Loading..." : ""}
                 </h2>
                 <Content  >
+                
                     {this.renderPosts(posts)}
                     
                 </Content>
