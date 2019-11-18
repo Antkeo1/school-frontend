@@ -111,3 +111,14 @@ export const leaveGroup = (userId, token, groupId) => {
         })
         .catch(err => console.log(err));
 };
+
+export const postByGroupMembers = (groupId) => {
+    console.log(groupId)
+    return fetch(`${process.env.REACT_APP_API_URL}/groups/${groupId}`, {
+        method: "GET",
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};

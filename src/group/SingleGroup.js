@@ -3,6 +3,7 @@ import {singleGroup, remove, read} from './apiGroup'
 import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
 import JoinGroupButton from './JoinGroupButton'
+import GroupPost from './groupPost'
 import DefaultPost from "../images/person.png";
 // import Comment from './Comment'
 import {Container, 
@@ -80,7 +81,7 @@ class SingleGroup extends Component {
   }
 
     deleteGroup = () => {
-        const groupId = this.props.match.params.postId
+        const groupId = this.props.match.params.groupId
         const token = isAuthenticated().token
         remove(groupId, token).then(data => {
             if(data.error) {
@@ -202,6 +203,12 @@ class SingleGroup extends Component {
                                 </div>
                             </div>
                         )}
+                        {this.state.member ? (
+                            <GroupPost groupId={this.props.match.params.groupId}/>
+                        ) : (null)
+
+                        }
+                        
                     </div>
                 </div>
         );
@@ -228,6 +235,8 @@ class SingleGroup extends Component {
                                         </div>
                                         ) : (
                                             this.renderGroup(group)
+                                      
+                                         
                                         )
                                     }
                                    {/* <div className='container'>
