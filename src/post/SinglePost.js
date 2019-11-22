@@ -101,7 +101,7 @@ class SinglePost extends Component {
         : DefaultPost;
 
         return (
-                <div  className='container'>
+                <div  >
                     <p className="font-italic mark">
                         Posted by{" "}
                         <Link to={`${posterId}`}>
@@ -115,7 +115,7 @@ class SinglePost extends Component {
                     <p className="card-text">
                         {post.body}
                     </p>
-                   <div className='container'>
+                   <div >
                     <img 
                             src={`${
                                 process.env.REACT_APP_API_URL
@@ -212,7 +212,7 @@ class SinglePost extends Component {
                                             this.renderPost(post)
                                         )
                                     }
-                                   <div className='container'>
+                                   <div >
                                         
 
                                         <Comment postId={post._id} comments={comments.reverse()} updateComments={this.updateComments}/>

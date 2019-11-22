@@ -38,11 +38,11 @@ class Comment extends React.Component {
 
         if (this.isValid()) {
             const userId = isAuthenticated().user._id
-            const postId = this.props.postId
+            const groupId = this.props.groupId
             const token = isAuthenticated().token
             
 
-            comment(userId, token, postId, {text: this.state.text})
+            comment(userId, token, groupId, {text: this.state.text})
                 .then(data => {
                     if(data.error) {
                         console.log(data.error)
@@ -58,11 +58,11 @@ class Comment extends React.Component {
 
     deleteComment = (comment) => {
         const userId = isAuthenticated().user._id
-        const postId = this.props.postId
+        const groupId = this.props.groupId
         const token = isAuthenticated().token
         
 
-        uncomment(userId, token, postId, comment)
+        uncomment(userId, token, groupId, comment)
             .then(data => {
                 if(data.error) {
                     console.log(data.error)
@@ -88,7 +88,7 @@ class Comment extends React.Component {
        
          const {comments} = this.props
          const {error} = this.state
-
+         console.log(comments)
         return (
             <div>
                 <Container>

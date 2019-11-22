@@ -3,9 +3,8 @@ import {singleGroup, remove, read} from './apiGroup'
 import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
 import JoinGroupButton from './JoinGroupButton'
-import GroupPost from './groupPost'
 import DefaultPost from "../images/person.png";
-import Comment from './commentGroup'
+import Comment from './Comment'
 
 import {Container, 
     Body,
@@ -39,6 +38,7 @@ class SingleGroup extends Component {
 
   updateComments = comments => {
     this.setState({comments})
+    console.log(comments)
 }
 
   clickJoinButton = callApi => {
@@ -51,7 +51,6 @@ class SingleGroup extends Component {
         this.setState({ error: data.error });
       } else {
         this.setState({ group: data, member: true });
-       console.log(this.state.member)
       }
     });
   };
@@ -71,13 +70,6 @@ class SingleGroup extends Component {
     });
   };
 
-
-    // checkLike = (likes) => {
-    //     const userId = isAuthenticated() && isAuthenticated().user._id
-    //     let match = likes.indexOf(userId) !== -1
-    //     return match;
-    // }
-
     componentDidMount() {
         const groupId = this.props.match.params.groupId
         singleGroup(groupId).then(data => {
@@ -85,8 +77,7 @@ class SingleGroup extends Component {
                 console.log(data.error)
             } else {
                 let member = this.checkMember(data);
-                this.setState({group: data, member})   
-                // console.log(this.state.group.comments) 
+                this.setState({group: data, member, comments: data.comments}) 
                     
             }
         }) 
@@ -101,7 +92,6 @@ class SingleGroup extends Component {
             } else {
                 let member = this.checkMember(data);
                 this.setState({group: data, member: member})
-                console.log(member)
             }
         }) 
   }
@@ -207,7 +197,7 @@ class SingleGroup extends Component {
                         
                         }
 
-                        {/* {isAuthenticated().user && isAuthenticated().user.role == 'admin' &&  (
+                        {isAuthenticated().user && isAuthenticated().user.role == 'admin' &&  (
                             <div className='card mt-5'>
                                 <div className='card-body'>
                                     <h5 className='card-title'>Admin</h5>
@@ -228,10 +218,10 @@ class SingleGroup extends Component {
                                     </button>
                                 </div>
                             </div>
-                        )} */}
+                        )}
                         {this.state.member ? (
                             
-                            <div className='container'>
+                            <div >
                                  <Comment groupId={group._id} comments={this.state.comments.reverse()} updateComments={this.updateComments}/>
                             </div>
                         ) : (null)
@@ -241,7 +231,8 @@ class SingleGroup extends Component {
                         {
                           isAuthenticated().user._id == group.createdBy._id ?  (
                               <div>
-                                  {this.state.comments}
+                                   <Comment groupId={group._id} comments={this.state.comments.reverse()} updateComments={this.updateComments}/>
+                                   
                               </div>
                           ) : (null)
                         }
@@ -254,7 +245,7 @@ class SingleGroup extends Component {
 
     render() {
         const {group, member, comments, redirectToHome, redirectToSignIn} = this.state
-        console.log(member)
+        console.log(group)
         if(redirectToHome) {
             return <Redirect to={`/`} />
          } else if(redirectToSignIn) {
@@ -277,12 +268,13 @@ class SingleGroup extends Component {
                                          
                                         )
                                     }
-                                  <div className='container'>
-                                        
+                                    
+                                  {/* <div >
+                                       
 
                                         <Comment groupId={group._id} comments={comments.reverse()} updateComments={this.updateComments}/>
                                         
-                                    </div> 
+                                    </div>  */}
                             </div>
                        </Content>
 

@@ -139,7 +139,7 @@ export const comment = (userId, token, groupId, comment) => {
 };
 
 export const uncomment = (userId, token, groupId, comment) => {
-    return fetch(`${process.env.REACT_APP_API_URL}/post/unComment`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/post/uncomment`, {
         method: "PUT",
         headers: {
             Accept: "application/json",
