@@ -27,6 +27,7 @@ import NewPost from './post/NewPost';
 import EditPost from './post/EditPost'
 
 import NewGroup from './group/NewGroup'
+import MyGroup from './group/MyGroup'
 import SingleGroup from './group/SingleGroup'
 import EditGroup from './group/EditGroup'
 import Groups from './group/Groups'
@@ -68,6 +69,7 @@ const MainRouter = () => {
                 <PrivateRoute exact path='/group/edit/:groupId' component={EditGroup} />
                 <Route exact path='/group/:groupId' component={SingleGroup} />
                 <PrivateRoute exact path='/groups' component={Groups} />
+                <PrivateRoute exact path='/mygroups' component={MyGroup} />
             </Switch>
         </div>
     )

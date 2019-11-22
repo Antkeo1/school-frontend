@@ -13,48 +13,10 @@ class groupPost extends Component {
         this.state = {
             group: '',
             posts: [],
-            page: 1,
             like: false,
             likes: 0
         };
     }
-    
-
-    // checkFollow = user => {
-    //     const jwt = isAuthenticated();
-    //     const match = user.followers.find(follower => {
-    //       // one id has many other ids (followers) and vice versa
-    //       return follower._id === jwt.user._id;
-    //     });
-    //     return match;
-    //   };
-
-    loadPosts = () => {
-        const groupId = this.props.match.params.groupId
-        postByGroupMembers(groupId).then(data => {
-            if (data.error) {
-                console.log(data.error);
-            } else {
-                console.log(data)
-                this.setState({ posts: data });
-                
-
-            }
-        });
-    };
-
-    init = groupId => {
-        const token = isAuthenticated().token;
-        singleGroup(groupId, token).then(data => {
-          if (data.error) {
-            this.setState({ redirectToSignin: true });
-          } else {
-            // let following = this.checkFollow(data);
-            this.setState({ group: data, });
-            this.loadPosts(data._id);
-          }
-        });
-      };
 
     checkLike = (likes) => {
         const userId = isAuthenticated().user._id
@@ -63,8 +25,6 @@ class groupPost extends Component {
     }
 
     componentDidMount() {
-        const userId = isAuthenticated().user._id;
-        // this.init(userId);
         const groupId = this.props.groupId
         postByGroupMembers(groupId).then(data => {
             if (data.error) {
@@ -107,7 +67,6 @@ class groupPost extends Component {
     // };
 
     renderPosts = posts => {
-        console.log(posts)
         return (
             <div  id='post' className='row container'>
                 {posts.map((post, i) => {

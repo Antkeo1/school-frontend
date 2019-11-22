@@ -47,9 +47,15 @@ class Side extends Component {
                                             </Link>
                                         </div>
 
+                                        <div>
+                                            <Link className='mb-5' to={`/mygroups`}  >
+                                                My groups
+                                            </Link>
+                                        </div>
+
                                        <div>
                                             <Link className=''  to={`/uploads/by/${isAuthenticated().user._id}`}  >
-                                                Uploads
+                                                My Documents
                                             </Link>
                                         </div>
 

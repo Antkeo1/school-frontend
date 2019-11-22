@@ -5,7 +5,8 @@ import {isAuthenticated} from '../auth'
 import JoinGroupButton from './JoinGroupButton'
 import GroupPost from './groupPost'
 import DefaultPost from "../images/person.png";
-// import Comment from './Comment'
+import Comment from './commentGroup'
+
 import {Container, 
     Body,
     Content,
@@ -18,8 +19,9 @@ class SingleGroup extends Component {
         group: '',
         redirectToHome: false,
         redirectToSignIn: false,
-        member: false
-        // posts: []
+        member: false,
+        members: [],
+        comments: []
     }
 
     // check follow
@@ -31,19 +33,40 @@ class SingleGroup extends Component {
         // if there is a match, then current user is a member and can not join again
       return member._id === jwt.user._id;
     });
-    return match;
+    if(match) {return true} else return false
     
   };
+
+  updateComments = comments => {
+    this.setState({comments})
+}
 
   clickJoinButton = callApi => {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().token;
 
     callApi(userId, token, this.state.group._id).then(data => {
+        
         if (data.error) {
         this.setState({ error: data.error });
       } else {
-        this.setState({ group: data, member: !this.state.member });
+        this.setState({ group: data, member: true });
+       console.log(this.state.member)
+      }
+    });
+  };
+
+  clickLeaveButton = callApi => {
+    const userId = isAuthenticated().user._id;
+    const token = isAuthenticated().token;
+
+    callApi(userId, token, this.state.group._id).then(data => {
+        
+        if (data.error) {
+        this.setState({ error: data.error });
+      } else {
+        this.setState({ group: data, member: false });
+       
       }
     });
   };
@@ -62,7 +85,9 @@ class SingleGroup extends Component {
                 console.log(data.error)
             } else {
                 let member = this.checkMember(data);
-                this.setState({group: data, member})           
+                this.setState({group: data, member})   
+                // console.log(this.state.group.comments) 
+                    
             }
         }) 
     }
@@ -75,7 +100,8 @@ class SingleGroup extends Component {
                 console.log(data.error)
             } else {
                 let member = this.checkMember(data);
-                this.setState({group: data, member})
+                this.setState({group: data, member: member})
+                console.log(member)
             }
         }) 
   }
@@ -176,12 +202,12 @@ class SingleGroup extends Component {
                                 Delete Group page
                             </button>
                         </>) : (
-                            <JoinGroupButton member={this.state.member} onButtonClick={this.clickJoinButton}/>
+                            <JoinGroupButton member={this.state.member} onButtonClick={this.clickJoinButton} onButtonLeave={this.clickLeaveButton}/>
                         )
                         
                         }
 
-                        {isAuthenticated().user && isAuthenticated().user.role == 'admin' && (
+                        {/* {isAuthenticated().user && isAuthenticated().user.role == 'admin' &&  (
                             <div className='card mt-5'>
                                 <div className='card-body'>
                                     <h5 className='card-title'>Admin</h5>
@@ -202,12 +228,24 @@ class SingleGroup extends Component {
                                     </button>
                                 </div>
                             </div>
-                        )}
+                        )} */}
                         {this.state.member ? (
-                            <GroupPost groupId={this.props.match.params.groupId}/>
+                            
+                            <div className='container'>
+                                 <Comment groupId={group._id} comments={this.state.comments.reverse()} updateComments={this.updateComments}/>
+                            </div>
                         ) : (null)
 
                         }
+
+                        {
+                          isAuthenticated().user._id == group.createdBy._id ?  (
+                              <div>
+                                  {this.state.comments}
+                              </div>
+                          ) : (null)
+                        }
+
                         
                     </div>
                 </div>
@@ -215,8 +253,8 @@ class SingleGroup extends Component {
     }
 
     render() {
-        const {group, mission, comments, member, redirectToHome, redirectToSignIn} = this.state
-         console.log(member)
+        const {group, member, comments, redirectToHome, redirectToSignIn} = this.state
+        console.log(member)
         if(redirectToHome) {
             return <Redirect to={`/`} />
          } else if(redirectToSignIn) {
@@ -239,13 +277,12 @@ class SingleGroup extends Component {
                                          
                                         )
                                     }
-                                   {/* <div className='container'>
+                                  <div className='container'>
                                         
 
-                                        <Comment postId={post._id} comments={comments.reverse()} updateComments={this.updateComments}/>
+                                        <Comment groupId={group._id} comments={comments.reverse()} updateComments={this.updateComments}/>
                                         
                                     </div> 
-                                */}
                             </div>
                        </Content>
 

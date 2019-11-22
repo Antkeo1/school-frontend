@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../auth";
 import { Redirect, Link } from "react-router-dom";
-import { read } from "./apiUser";
+import { read, groupsByUser } from "./apiUser";
 import DefaultProfile from "../images/avatar.jpeg";
 import DeleteUser from "./DeleteUser";
 import FollowProfileButton from "./FollowProfileButton";
@@ -18,11 +18,14 @@ class Profile extends Component {
   constructor() {
     super();
     this.state = {
-      user: { following: [], followers: [] },
+      // groups that user is a member of
+      user: { following: [], followers: [], group: [] },
       redirectToSignin: false,
       following: false,
       error: "",
       posts: [],
+      // groups that user created
+      groups: [],
       uploads: []
     };
   }
@@ -60,6 +63,7 @@ class Profile extends Component {
       } else {
         let following = this.checkFollow(data);
         this.setState({ user: data, following });
+        this.createdGroup(data._id)
         this.loadPosts(data._id);
         this.loadUploads(data._id);
       }
@@ -76,6 +80,17 @@ class Profile extends Component {
       }
     });
   };
+
+  createdGroup = userId => {
+    const token = isAuthenticated().token;
+    groupsByUser(userId, token).then(data => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        this.setState({ groups: data });
+      }
+    });
+  }
 
   loadPosts = userId => {
     const token = isAuthenticated().token;
@@ -100,8 +115,8 @@ class Profile extends Component {
   
 
   render() {
-    const { redirectToSignin, user, posts, uploads } = this.state;
-    console.log(user)
+    const { redirectToSignin, user, posts, groups, uploads } = this.state;
+    console.log(groups)
     if (redirectToSignin) return <Redirect to="/signin" />;
 
     const photoUrl = user._id
@@ -184,7 +199,7 @@ class Profile extends Component {
                 <div>
                   {isAuthenticated().user &&
                     isAuthenticated().user.role === "admin" && (
-                      <div class="card mt-5 mr-5">
+                      <div className="card mt-5 mr-5">
                         <div className="card-body">
                           <h5 className="card-title">Admin</h5>
                           <p className="mb-2 text-danger">
@@ -197,7 +212,6 @@ class Profile extends Component {
                             Edit Profile
                           </Link>
                           <DeleteUser userId={user._id} />
-                          {/* <DeleteUser /> */}
                         </div>
                       </div>
                     )}
@@ -214,6 +228,7 @@ class Profile extends Component {
                 <ProfileTabs
                   followers={user.followers}
                   following={user.following}
+                  groups={user.group}
                   posts={posts.reverse()}
                   uploads={uploads}
                 />

@@ -4,11 +4,11 @@ import DefaultProfile from "../images/avatar.jpeg";
 
 class ProfileTabs extends Component {
     render() {
-        const { following, followers, posts } = this.props;
+        const { following, followers, posts, groups } = this.props;
         return (
             <div>
                 <div className="row">
-                    <div className="col-md-4">
+                    <div className="col-md-3">
                         <h3 className="text-primary">
                             {followers.length} Followers
                         </h3>
@@ -44,7 +44,7 @@ class ProfileTabs extends Component {
                         ))}
                     </div>
 
-                    <div className="col-md-4">
+                    <div className="col-md-3">
                         <h3 className="text-primary">
                             {following.length} Following
                         </h3>
@@ -80,7 +80,23 @@ class ProfileTabs extends Component {
                         ))}
                     </div>
 
-                    <div className="col-md-4">
+                    <div className="col-md-3">
+                        <h3 className="text-primary">{groups.length} Groups</h3>
+                        <hr />
+                        {groups.map((group, i) => (
+                            <div key={i}>
+                                <div>
+                                    <Link to={`/group/${group._id}`}>
+                                        <div>
+                                            <p className="lead">{group.name}</p>
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="col-md-3">
                         <h3 className="text-primary">{posts.length} Posts</h3>
                         <hr />
                         {posts.map((post, i) => (
@@ -95,6 +111,7 @@ class ProfileTabs extends Component {
                             </div>
                         ))}
                     </div>
+
 
                     <div>
                         

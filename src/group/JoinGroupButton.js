@@ -7,7 +7,7 @@ class JoinGroupButton extends Component {
     };
 
     unfollowClick = () => {
-        this.props.onButtonClick(leaveGroup);
+        this.props.onButtonLeave(leaveGroup);
     };
 
     render() {

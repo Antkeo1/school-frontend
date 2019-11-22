@@ -1,3 +1,5 @@
+import { isAuthenticated } from "../auth";
+
 export const create = (userId, token, group) => {
     return fetch(`${process.env.REACT_APP_API_URL}/group/new/${userId}`, {
         method: "POST",
@@ -79,8 +81,7 @@ export const update = (groupId, token, group) => {
 };
 
 export const joinGroup = (userId, token, groupId) => {
-    console.log(groupId)
-    return fetch(`${process.env.REACT_APP_API_URL}/user/joingroup`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/new/joingroup`, {
         method: "PUT",
         headers: {
             Accept: "application/json",
@@ -96,7 +97,6 @@ export const joinGroup = (userId, token, groupId) => {
 };
 
 export const leaveGroup = (userId, token, groupId) => {
-    console.log(groupId)
     return fetch(`${process.env.REACT_APP_API_URL}/user/leavegroup`, {
         method: "PUT",
         headers: {
@@ -113,9 +113,40 @@ export const leaveGroup = (userId, token, groupId) => {
 };
 
 export const postByGroupMembers = (groupId) => {
-    console.log(groupId)
     return fetch(`${process.env.REACT_APP_API_URL}/groups/${groupId}`, {
         method: "GET",
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+
+export const comment = (userId, token, groupId, comment) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/group/comment`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId, groupId, comment})
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+
+export const uncomment = (userId, token, groupId, comment) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/post/unComment`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId, groupId, comment})
     })
         .then(response => {
             return response.json();
