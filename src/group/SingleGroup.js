@@ -85,13 +85,13 @@ class SingleGroup extends Component {
 
 
   UNSAFE_componentWillReceiveProps(props) {
-    const groupId = this.props.match.params.groupId
+    const groupId = props.match.params.groupId
         singleGroup(groupId).then(data => {
             if (data.error) {
                 console.log(data.error)
             } else {
                 let member = this.checkMember(data);
-                this.setState({group: data, member: member})
+                this.setState({group: data, member, comments: data.comments})
             }
         }) 
   }
