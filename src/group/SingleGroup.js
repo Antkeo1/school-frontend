@@ -50,7 +50,7 @@ class SingleGroup extends Component {
         if (data.error) {
         this.setState({ error: data.error });
       } else {
-        this.setState({ group: data, member: true });
+        this.setState({  member: true });
       }
     });
   };
@@ -64,7 +64,7 @@ class SingleGroup extends Component {
         if (data.error) {
         this.setState({ error: data.error });
       } else {
-        this.setState({ group: data, member: false });
+        this.setState({  member: false });
        
       }
     });
