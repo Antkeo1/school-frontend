@@ -110,7 +110,7 @@ class UserUpload extends Component {
                                                 window.open(upload.url, '_blank')
                                             }} >{upload.title}:  {upload.body}</a>
                                            <Link to={`/upload/${upload._id}`} className='btn btn-raised btn-warning ml-4 btn-sm mr-4'>
-                                              View
+                                              View Details
                                           </Link> 
                                 </div>
                             </div>

@@ -8,6 +8,8 @@ class Signup extends Component {
         this.state = {
             name: '',
             email: '',
+            role: '',
+            code: '',
             password: '',
             error: '',
             open: false
@@ -24,10 +26,12 @@ class Signup extends Component {
 
     handleSubmit = event => {
         event.preventDefault()
-        const {name, email, password} = this.state
+        const {name, email, role, code, password} = this.state
         const user = {
             name,
             email,
+            role,
+            code,
             password
         }
         signup(user)
@@ -37,13 +41,15 @@ class Signup extends Component {
                     error: '',
                     name: '',
                     email: '',
+                    role: '',
+                    code: '',
                     password: '',
                     open: true
                 })
         })
     }
 
-    signupForm = (name, email, password) => {
+    signupForm = (name, email, role, code, password) => {
         return (
         <form>
             <div className='form-group'>
@@ -55,6 +61,18 @@ class Signup extends Component {
                 <label className='text-muted'>Email</label>
                 <input onChange={this.handleChange('email')} type='email' className='form-control' value={email} />
             </div>
+
+            <div className='form-group'>
+                <label className='text-muted'>Code</label>
+                <input onChange={this.handleChange('code')} type='number' className='form-control' value={code} />
+            </div>
+
+            {code === '8290' ? (
+                <div className='form-group'>
+                    <label className='text-muted'>Role</label>
+                    <input onChange={this.handleChange('role')} type='text' className='form-control' value={role} />
+                </div>
+            ) : (null)}
             
             <div className='form-group'>
                 <label className='text-muted'>Password</label>
@@ -68,7 +86,7 @@ class Signup extends Component {
 
 
     render() {
-        const {name, email, password, error, open} = this.state
+        const {name, email, role, code, password, error, open} = this.state
 
         return (
             <div id='authForm' className='container'>
@@ -82,7 +100,7 @@ class Signup extends Component {
                     New account is successfully created. Please <Link to='/signin' >Sign In</Link>.
                 </div>
 
-                {this.signupForm(name, email, password)}
+                {this.signupForm(name, email, role, code, password)}
             </div>
         )
     }
