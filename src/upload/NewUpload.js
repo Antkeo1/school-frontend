@@ -3,11 +3,9 @@ import { isAuthenticated } from "../auth";
 import { create } from "./apiUpload";
 import { Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
-import {Container, 
-    Body,
-    Content,
-    Aside,
-  } from 'react-holy-grail-layout'
+import {withTracking} from 'react-tracker'
+import {getStudentUploadEvent} from '../tracking/events/upload'
+import {Container, Body, Content } from 'react-holy-grail-layout'
 
 
 class NewUpload extends Component {
@@ -22,7 +20,8 @@ class NewUpload extends Component {
             user: {},
             fileSize: 0,
             loading: false,
-            redirectToUpload: false
+            redirectToUpload: false,
+           // events: []
         };
         this.onChange = editorState => this.setState({editorState})
 
@@ -70,13 +69,19 @@ class NewUpload extends Component {
             create(userId, token, this.uploadData).then(data => {
                 if (data.error) this.setState({ error: data.error });
                 else {
+                    let newUpload = 'New Document by' +' '+ data.uploadedBy.name
+                    
                     this.setState({
                         loading: false,
                         title: "",
                         body: "",
                         url:"",
-                        redirectToUpload: true
-                    });
+                        redirectToUpload: true,
+                        //events
+                   });
+                    console.log(getStudentUploadEvent)
+                    this.props.trackStudentUpload( data.uploadedBy.name, data.title )
+                   // window.alert(newUpload)
                 }
             });
         }
@@ -128,11 +133,13 @@ class NewUpload extends Component {
                 <button
                     onClick={this.clickSubmit}
                     className="btn btn-raised btn-primary"
-                    style={{'margin-left': '10px'}}
+                    style={{'marginLeft': '10px'}}
                 >
                     Upload File
                 </button>
                 <Link className='btn btn-raised ml-5' to={'/uploads'}>Back</Link>
+
+               
             </div>
         </form>
     );
@@ -144,11 +151,14 @@ class NewUpload extends Component {
             url,
             error,
             loading,
-            redirectToUpload
+            redirectToUpload,
+            //events
         } = this.state;
+       
 
         if (redirectToUpload) {
             return <Redirect to={`/uploads/by/${isAuthenticated().user._id}`} />;
+            
         }
 
         return (
@@ -184,4 +194,11 @@ class NewUpload extends Component {
     }
 }
 
-export default NewUpload;
+const mapTrackingToProps = trackevent => {
+    return {
+      trackStudentUpload: (NewUploadBy, uploadName) => 
+        trackevent(getStudentUploadEvent(NewUploadBy, uploadName)) 
+      }
+  }
+
+export default withTracking(mapTrackingToProps)(NewUpload);

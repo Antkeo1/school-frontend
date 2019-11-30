@@ -1,6 +1,6 @@
 import React from 'react'
-import {findPeople, follow} from './apiUser'
-import {Link} from 'react-router-dom'
+import {findPeople, follow, searchUser} from './apiUser'
+import {Link, Redirect} from 'react-router-dom'
 import DefaultProfile from '../images/avatar.jpeg'
 import {isAuthenticated} from '../auth'
 import {Container, 
@@ -14,6 +14,9 @@ class FindPeople extends React.Component {
         super()
         this.state = {
             users: [],
+            term: '',
+            searched: false,
+            searchedUser: '',
             error: '',
             open: false
         }
@@ -32,6 +35,11 @@ class FindPeople extends React.Component {
         })
     }
 
+    handleChange = event => {
+        this.setState({error: ''})
+        this.setState({term: event.target.value})
+    }
+
     clickFollow = (user, i) => {
         const userId = isAuthenticated().user._id
         const token = isAuthenticated().token
@@ -46,6 +54,25 @@ class FindPeople extends React.Component {
                     this.setState({users: toFollow, open: true, followMessage: `following ${user.name}`})
                 }
             })
+    }
+
+    search = (e) => {
+        e.preventDefault()
+        this.state.users.map(user => {
+            if (user.name === this.state.term) {
+                this.setState({searched: true, searchedUser: user})
+            }
+        })
+
+    }
+
+    renderSearcbar = () => {
+        return (
+       <form>
+           <input type='text' value={this.state.term} onChange={this.handleChange} />
+           <button onClick={this.search}>Search</button>
+       </form>
+        )
     }
 
     renderUsers = (users) => (
@@ -70,7 +97,9 @@ class FindPeople extends React.Component {
 
 
     render() {
-        const {users, open, followMessage} = this.state
+        const {users, open, term, searched, searchedUser, followMessage} = this.state
+        console.log(term)
+        if (searched) return <Redirect to={`user/${searchedUser._id}`}/>
         return (
             <div>
                <Container>
@@ -82,7 +111,7 @@ class FindPeople extends React.Component {
                                 <p>{followMessage}</p>
                             </div>
                         )}
-
+                          {this.renderSearcbar()}
                         {this.renderUsers(users)}
                        </Content>
 

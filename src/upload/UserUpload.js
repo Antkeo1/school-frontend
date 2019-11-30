@@ -7,6 +7,7 @@ import {Container,
   Content,
   Aside,
 } from 'react-holy-grail-layout'
+import { trackStudentUpload } from "../tracking/listeners/upload";
 
 
 class UserUpload extends Component {
@@ -99,8 +100,10 @@ class UserUpload extends Component {
 
                       </div>
                       <hr />
+                      
                       <div id='title'>
-                        {uploads.reverse().map((upload, i) => (
+          
+                        {uploads.reverse().map((upload,  i) => (
                         
                             <div key={i}>
                               
@@ -116,7 +119,9 @@ class UserUpload extends Component {
                             </div>
                         ))}
                       </div>
+                      
                   </div> 
+                  
                   </Content>
                   
                   
@@ -124,7 +129,9 @@ class UserUpload extends Component {
                             
                 </Body>
               </Container>
+              
             </div>
+            
         );
     }
 }

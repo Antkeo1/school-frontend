@@ -16,6 +16,7 @@
     "react-file-viewer": "^0.5.0",
     "react-google-login": "^5.0.2",
     "react-google-recaptcha": "^1.0.5",
+    "react-gtm-module": "^2.0.8",
     "react-holy-grail-layout": "^0.1.5",
     "react-pdf": "^4.1.0",
     "react-pdf-js": "^5.1.0",
@@ -23,6 +24,7 @@
     "react-recaptcha": "^2.3.10",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^2.1.5",
+    "react-tracker": "0.0.8",
     "slate": "^0.47.8",
     "slate-react": "^0.22.9"
   },

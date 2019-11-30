@@ -21,6 +21,7 @@ class Side extends Component {
 
     
     render() {
+        console.log(isAuthenticated().user)
         const {redirectToProfile} = this.state
 
         if (redirectToProfile) {

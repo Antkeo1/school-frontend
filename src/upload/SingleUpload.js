@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {singleUpload, remove, like, unlike} from './apiUpload'
+import {singleUpload, remove, like, unlike, share} from './apiUpload'
 import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
 import DefaultPost from "../images/person.png";
@@ -17,18 +17,18 @@ class SingleUpload extends Component {
         upload: '',
         redirectToUpload: false,
         redirectToSignIn: false,
-        like: false,
-        likes: 0,
+        share: false,
         comments: []
     }
     
-    checkLike = (likes) => {
+    checkShare = (share) => {
         const userId = isAuthenticated() && isAuthenticated().user._id
-        let match = likes.indexOf(userId) !== -1
+        let match = share.indexOf(userId) !== -1
         return match;
     }
 
     componentDidMount = () => {
+      
         const uploadId = this.props.match.params.uploadId
         singleUpload(uploadId).then(data => {
             if (data.error) {
@@ -37,7 +37,7 @@ class SingleUpload extends Component {
                 this.setState({
                     upload: data, 
                     likes: data.likes.length, 
-                    like: this.checkLike(data.likes),
+                    // share: this.checkShare(data.likes),
                     comments: data.comments
                 })
             }
@@ -67,6 +67,29 @@ class SingleUpload extends Component {
                 this.setState({
                     like: !this.state.like,
                     likes: data.likes.length
+                })
+            }
+        })
+    }
+
+    shareToggle = () => {
+        if(!isAuthenticated()) {
+            this.setState({
+                redirectToSignIn: true
+            })
+            return false
+        }
+        let callApi = this.state.share ? '' : share
+        const groupId = this.state.upload.uploadedBy.group._id
+        const userId = isAuthenticated().user._id
+        const token = isAuthenticated().token
+        
+        callApi(groupId, token, userId).then(data => {
+            if(data.error) {
+                console.log(data.error)
+            } else {
+                this.setState({
+                    share: !this.state.share
                 })
             }
         })
@@ -109,7 +132,7 @@ class SingleUpload extends Component {
             process.env.REACT_APP_API_URL
         }/upload/photo/${upload._id}`
 
-        const {likes, like} = this.state
+        const {likes, share, like} = this.state
 
         
 
@@ -162,6 +185,8 @@ class SingleUpload extends Component {
                         {likes} unlike
                     </h3>
                     )}
+
+                         
                   
                     <div className='d-inline-block'>
                         <Link
@@ -191,7 +216,7 @@ class SingleUpload extends Component {
 
     render(){
         const {upload, comments, redirectToSignIn, redirectToUpload, } = this.state
-        console.log(comments)
+       
         if(redirectToUpload ) {
             return <Redirect to={`/uploads/by/${isAuthenticated().user._id}`} />
          } else if (redirectToSignIn) {

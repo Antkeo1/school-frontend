@@ -166,3 +166,19 @@ export const uncomment = (userId, token, uploadId, comment) => {
         })
         .catch(err => console.log(err));
 };
+
+export const share = (groupId, token, userId) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/admin/addnotifications`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({groupId, userId})
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};

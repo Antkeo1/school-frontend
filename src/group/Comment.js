@@ -149,6 +149,17 @@ class Comment extends React.Component {
                                                     </>
                                                     
                                                     }
+
+                                                {isAuthenticated().user && 
+                                                    isAuthenticated().user._id === this.props.creatorId &&  
+                                                    <>
+                                                        <span onClick={() => this.deleteConfirm(comment)} className='text-danger'>
+                                                            Remove
+                                                        </span>
+                                                        
+                                                    </>
+                                                    
+                                                    }
                                                 </span>
                                             </div>
                                             

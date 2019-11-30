@@ -32,6 +32,7 @@ import SingleGroup from './group/SingleGroup'
 import EditGroup from './group/EditGroup'
 import Groups from './group/Groups'
 
+
 import Admin from './admin/Admin'
 
 
@@ -52,6 +53,7 @@ const MainRouter = () => {
                 <Route exact path='/users' component={Users} />
                 <PrivateRoute exact path='/user/:userId' component={Profile} />
                 <PrivateRoute exact path='/user/edit/:userId' component={EditProfile} />
+               
                 
                 
                 <PrivateRoute exact path='/post/create' component={NewPost} />

@@ -5,6 +5,7 @@ import {isAuthenticated} from '../auth'
 import JoinGroupButton from './JoinGroupButton'
 import DefaultPost from "../images/person.png";
 import Comment from './Comment'
+import Events from '../Events/Events'
 
 import {Container, 
     Body,
@@ -20,6 +21,7 @@ class SingleGroup extends Component {
         redirectToSignIn: false,
         member: false,
         members: [],
+        events: [],
         comments: []
     }
 
@@ -39,6 +41,11 @@ class SingleGroup extends Component {
   updateComments = comments => {
     this.setState({comments})
     console.log(comments)
+}
+
+updateEvents = events => {
+    this.setState({events})
+    console.log(events)
 }
 
   clickJoinButton = callApi => {
@@ -73,11 +80,12 @@ class SingleGroup extends Component {
     componentDidMount() {
         const groupId = this.props.match.params.groupId
         singleGroup(groupId).then(data => {
+            console.log(data)
             if (data.error) {
                 console.log(data.error)
             } else {
                 let member = this.checkMember(data);
-                this.setState({group: data, member, comments: data.comments}) 
+                this.setState({group: data, events: data.events, member, comments: data.comments}) 
                     
             }
         }) 
@@ -91,7 +99,7 @@ class SingleGroup extends Component {
                 console.log(data.error)
             } else {
                 let member = this.checkMember(data);
-                this.setState({group: data, member, comments: data.comments})
+                this.setState({group: data, events: data.events, member, comments: data.comments})
             }
         }) 
   }
@@ -116,6 +124,7 @@ class SingleGroup extends Component {
     }
 
     renderGroup = (group) => {
+        console.log(group.createdBy._id)
         const creatorId = group.createdBy
         ? `/user/${group.createdBy._id}`
         : "";
@@ -223,16 +232,19 @@ class SingleGroup extends Component {
                             
                             <div >
                                  <Comment groupId={group._id} comments={this.state.comments.reverse()} updateComments={this.updateComments}/>
+                                 
                             </div>
                         ) : (null)
 
                         }
 
+                       
+
                         {
                           isAuthenticated().user._id == group.createdBy._id ?  (
                               <div>
-                                   <Comment groupId={group._id} comments={this.state.comments.reverse()} updateComments={this.updateComments}/>
-                                   
+                                   <Comment groupId={group._id} creatorId={group.createdBy._id} comments={this.state.comments.reverse()} updateComments={this.updateComments}/>
+                              
                               </div>
                           ) : (null)
                         }
@@ -245,7 +257,7 @@ class SingleGroup extends Component {
 
     render() {
         const {group, member, comments, redirectToHome, redirectToSignIn} = this.state
-        console.log(group)
+        console.log(group.events)
         if(redirectToHome) {
             return <Redirect to={`/`} />
          } else if(redirectToSignIn) {

@@ -23,7 +23,6 @@ class Home extends React.Component {
         this.setState({ redirectToSignin: true });
       } else {   
         this.setState({ user: data});
-        console.log(this.state.user.group)
       }
     });
   };
