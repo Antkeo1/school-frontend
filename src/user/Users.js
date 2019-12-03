@@ -1,20 +1,20 @@
 import React from 'react'
 import {userList} from './apiUser'
-import {Link} from 'react-router-dom'
+import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
 import DefaultProfile from '../images/avatar.jpeg'
-import {Container, 
-    Header,
-    Body,
-    Content,
-    Aside
-} from 'react-holy-grail-layout'
+import {Container, Header, Body, Content } from 'react-holy-grail-layout'
 
 class Users extends React.Component {
     constructor() {
         super()
         this.state = {
-            users: []
+            users: [],
+            term: '',
+            searched: false,
+            searchedUser: '',
+            error: '',
+            searching: false,
         }
     }
 
@@ -27,6 +27,32 @@ class Users extends React.Component {
                 console.log(this.state.users)
             }
         })
+    }
+
+    handleChange = event => {
+        this.setState({error: ''})
+        this.setState({term: event.target.value})
+    }
+
+    search = (e) => {
+        e.preventDefault()
+        this.state.users.map(user => {
+            if (user.name === this.state.term) {
+                this.setState({searched: true, searchedUser: user})
+            } else {
+                this.setState({searching: true, error: 'User not found'})
+            }
+        })
+
+    }
+
+    renderSearcbar = () => {
+        return (
+       <form className='text-center'>
+           <input type='text' placeholder='Search users' value={this.state.term} onChange={this.handleChange} />
+           <button onClick={this.search}>Search</button>
+       </form>
+        )
     }
 
     renderUsers = (users) => (
@@ -48,16 +74,20 @@ class Users extends React.Component {
 
 
     render() {
-        const {users} = this.state
+        const {users, error, term, searched, searching, searchedUser} = this.state
+        console.log(term)
+        if (searched) { return <Redirect to={`user/${searchedUser._id}`}/> } 
         return (
-            <div >
+            <div style={{marginTop: '120px'}}>
                <Container>
                    <Header>
 
                    </Header>
                    <Body>
                        <Content >
-                       
+                           <h2>All Users</h2>
+                            {searching ? (<div className='text-danger'>{error}</div>) : (null)}
+                            {this.renderSearcbar()}
                             {this.renderUsers(users)}
                        </Content>
                        

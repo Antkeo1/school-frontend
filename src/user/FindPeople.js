@@ -18,6 +18,7 @@ class FindPeople extends React.Component {
             searched: false,
             searchedUser: '',
             error: '',
+            searching: false,
             open: false
         }
     }
@@ -61,6 +62,8 @@ class FindPeople extends React.Component {
         this.state.users.map(user => {
             if (user.name === this.state.term) {
                 this.setState({searched: true, searchedUser: user})
+            } else {
+                this.setState({searching: true, error: 'User not found'})
             }
         })
 
@@ -97,9 +100,9 @@ class FindPeople extends React.Component {
 
 
     render() {
-        const {users, open, term, searched, searchedUser, followMessage} = this.state
+        const {users, error, open, term, searched, searching, searchedUser, followMessage} = this.state
         console.log(term)
-        if (searched) return <Redirect to={`user/${searchedUser._id}`}/>
+        if (searched) { return <Redirect to={`user/${searchedUser._id}`}/> } 
         return (
             <div>
                <Container>
@@ -111,7 +114,8 @@ class FindPeople extends React.Component {
                                 <p>{followMessage}</p>
                             </div>
                         )}
-                          {this.renderSearcbar()}
+                        {searching ? (<div className='text-danger'>{error}</div>) : (null)}
+                        {this.renderSearcbar()}
                         {this.renderUsers(users)}
                        </Content>
 

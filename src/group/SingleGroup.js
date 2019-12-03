@@ -5,7 +5,6 @@ import {isAuthenticated} from '../auth'
 import JoinGroupButton from './JoinGroupButton'
 import DefaultPost from "../images/person.png";
 import Comment from './Comment'
-import Events from '../Events/Events'
 
 import {Container, 
     Body,

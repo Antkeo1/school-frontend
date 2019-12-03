@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
-import {singleUpload, remove, like, unlike, share} from './apiUpload'
+import {singleUpload, remove, like, unlike, message} from './apiUpload'
 import {Link, Redirect} from 'react-router-dom'
 import {isAuthenticated} from '../auth'
 import DefaultPost from "../images/person.png";
 import FileComment from './FileComment'
+import NewMessage from './NewMessage'
 // import { Document, Page, pdfjs } from 'react-pdf'
 import {Container, 
     Body,
@@ -18,7 +19,9 @@ class SingleUpload extends Component {
         redirectToUpload: false,
         redirectToSignIn: false,
         share: false,
-        comments: []
+        comments: [],
+        groupId: '',
+        message: ''
     }
     
     checkShare = (share) => {
@@ -38,14 +41,23 @@ class SingleUpload extends Component {
                     upload: data, 
                     likes: data.likes.length, 
                     // share: this.checkShare(data.likes),
-                    comments: data.comments
+                    comments: data.comments,
+                    groupId: data.uploadedBy.group.map(id => {
+                        return id
+                    })
                 })
+                console.log(this.state.groupId)
+                console.log(isAuthenticated().user)
             }
         }) 
     }
 
     updateComments = comments => {
         this.setState({comments})
+    }
+
+    updateMessage = message => {
+        this.setState(message)
     }
 
     likeToggle = () => {
@@ -72,28 +84,28 @@ class SingleUpload extends Component {
         })
     }
 
-    shareToggle = () => {
-        if(!isAuthenticated()) {
-            this.setState({
-                redirectToSignIn: true
-            })
-            return false
-        }
-        let callApi = this.state.share ? '' : share
-        const groupId = this.state.upload.uploadedBy.group._id
-        const userId = isAuthenticated().user._id
-        const token = isAuthenticated().token
+    // shareToggle = () => {
+    //     if(!isAuthenticated()) {
+    //         this.setState({
+    //             redirectToSignIn: true
+    //         })
+    //         return false
+    //     }
+    //     let callApi = this.state.share ? '' : share
+    //     const groupId = this.state.upload.uploadedBy.group._id
+    //     const userId = isAuthenticated().user._id
+    //     const token = isAuthenticated().token
         
-        callApi(groupId, token, userId).then(data => {
-            if(data.error) {
-                console.log(data.error)
-            } else {
-                this.setState({
-                    share: !this.state.share
-                })
-            }
-        })
-    }
+    //     callApi(groupId, token, userId).then(data => {
+    //         if(data.error) {
+    //             console.log(data.error)
+    //         } else {
+    //             this.setState({
+    //                 share: !this.state.share
+    //             })
+    //         }
+    //     })
+    // }
 
     deleteUpload = () => {
         const uploadId = this.props.match.params.uploadId
@@ -215,7 +227,7 @@ class SingleUpload extends Component {
     }
 
     render(){
-        const {upload, comments, redirectToSignIn, redirectToUpload, } = this.state
+        const {upload, comments, groupId, redirectToSignIn, redirectToUpload, } = this.state
        
         if(redirectToUpload ) {
             return <Redirect to={`/uploads/by/${isAuthenticated().user._id}`} />
@@ -237,8 +249,11 @@ class SingleUpload extends Component {
                                         this.renderUpload(upload)
                                     )
                                 }
-                                <div className='container'>
+                                {/* <div className='container'>
                                     <FileComment uploadId={upload._id} comments={comments.reverse()} updateComments={this.updateComments}/>
+                                </div> */}
+                                <div className='container'>
+                                    <NewMessage uploadId={upload._id} groupId={groupId} updateMessage={this.updateMessage} />
                                 </div>
                             </div>
                         </Content>

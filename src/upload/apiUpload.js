@@ -167,15 +167,31 @@ export const uncomment = (userId, token, uploadId, comment) => {
         .catch(err => console.log(err));
 };
 
-export const share = (groupId, token, userId) => {
-    return fetch(`${process.env.REACT_APP_API_URL}/admin/addnotifications`, {
+export const message = (userId, token, groupId, message ) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/group/message`, {
         method: "PUT",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({groupId, userId})
+        body: JSON.stringify({userId, groupId, message})
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+
+export const unmessage = (userId, token, groupId, message) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/group/unmessage`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId, groupId, message})
     })
         .then(response => {
             return response.json();
